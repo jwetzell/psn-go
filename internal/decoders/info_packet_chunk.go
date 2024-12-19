@@ -11,8 +11,6 @@ type InfoPacketChunkData struct {
 	TrackerList  *InfoTrackerListChunk
 }
 
-type EmptyData struct{}
-
 func decodeInfoPacketChunkData(infoPacketChunk Chunk) InfoPacketChunkData {
 	data := InfoPacketChunkData{}
 
