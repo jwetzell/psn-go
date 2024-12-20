@@ -4,14 +4,6 @@ type InfoTrackerNameChunkData struct {
 	TrackerName string
 }
 
-func decodeInfoTrackerNameChunkData(infoTrackerNameChunk Chunk) InfoTrackerNameChunkData {
-	tracker_name := string(infoTrackerNameChunk.ChunkData[0:infoTrackerNameChunk.Header.DataLen])
-
-	return InfoTrackerNameChunkData{
-		TrackerName: tracker_name,
-	}
-}
-
 type InfoTrackerNameChunk struct {
 	Chunk Chunk
 	Data  InfoTrackerNameChunkData
@@ -19,7 +11,12 @@ type InfoTrackerNameChunk struct {
 
 func DecodeInfoTrackerNameChunk(bytes []byte) InfoTrackerNameChunk {
 	chunk := DecodeChunk(bytes)
-	data := decodeInfoTrackerNameChunkData(chunk)
+
+	tracker_name := string(chunk.ChunkData[0:chunk.Header.DataLen])
+
+	data := InfoTrackerNameChunkData{
+		TrackerName: tracker_name,
+	}
 
 	return InfoTrackerNameChunk{
 		Chunk: chunk,

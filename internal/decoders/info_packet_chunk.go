@@ -11,31 +11,37 @@ type InfoPacketChunkData struct {
 	TrackerList  *InfoTrackerListChunk
 }
 
-func decodeInfoPacketChunkData(infoPacketChunk Chunk) InfoPacketChunkData {
+type InfoPacketChunk struct {
+	Chunk Chunk
+	Data  InfoPacketChunkData
+}
+
+func DecodeInfoPacketChunk(bytes []byte) InfoPacketChunk {
+	chunk := DecodeChunk(bytes)
 	data := InfoPacketChunkData{}
 
-	if infoPacketChunk.Header.HasSubchunks && infoPacketChunk.ChunkData != nil && infoPacketChunk.Header.DataLen > 0 {
+	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
 		offset := 0
 
-		for offset < int(infoPacketChunk.Header.DataLen) {
+		for offset < int(chunk.Header.DataLen) {
 
-			switch id := binary.LittleEndian.Uint16(infoPacketChunk.ChunkData[offset : offset+2]); id {
+			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
 			case 0:
-				packet_header := DecodePacketHeaderChunk(infoPacketChunk.ChunkData[offset:])
+				packet_header := DecodePacketHeaderChunk(chunk.ChunkData[offset:])
 				data.PacketHeader = &packet_header
 				offset += 4
 				if packet_header.Chunk.Header.DataLen > 0 {
 					offset = offset + int(packet_header.Chunk.Header.DataLen)
 				}
 			case 1:
-				system_name := DecodeInfoSystemNameChunk(infoPacketChunk.ChunkData[offset:])
+				system_name := DecodeInfoSystemNameChunk(chunk.ChunkData[offset:])
 				data.SystemName = &system_name
 				offset += 4
 				if system_name.Chunk.Header.DataLen > 0 {
 					offset = offset + int(system_name.Chunk.Header.DataLen)
 				}
 			case 2:
-				tracker_list := DecodeInfoTrackerListChunk(infoPacketChunk.ChunkData[offset:])
+				tracker_list := DecodeInfoTrackerListChunk(chunk.ChunkData[offset:])
 				data.TrackerList = &tracker_list
 				offset += 4
 				if tracker_list.Chunk.Header.DataLen > 0 {
@@ -47,17 +53,6 @@ func decodeInfoPacketChunkData(infoPacketChunk Chunk) InfoPacketChunkData {
 			}
 		}
 	}
-	return data
-}
-
-type InfoPacketChunk struct {
-	Chunk Chunk
-	Data  InfoPacketChunkData
-}
-
-func DecodeInfoPacketChunk(bytes []byte) InfoPacketChunk {
-	chunk := DecodeChunk(bytes)
-	data := decodeInfoPacketChunkData(chunk)
 
 	return InfoPacketChunk{
 		Chunk: chunk,

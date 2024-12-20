@@ -11,18 +11,6 @@ type DataTrackerXYZChunkData struct {
 	Z float32
 }
 
-func decodeDataTrackerXYZChunk(dataTrackerXYZChunk Chunk) DataTrackerXYZChunkData {
-	xBits := binary.LittleEndian.Uint32(dataTrackerXYZChunk.ChunkData[0:4])
-	yBits := binary.LittleEndian.Uint32(dataTrackerXYZChunk.ChunkData[4:8])
-	zBits := binary.LittleEndian.Uint32(dataTrackerXYZChunk.ChunkData[8:12])
-
-	return DataTrackerXYZChunkData{
-		X: math.Float32frombits(xBits),
-		Y: math.Float32frombits(yBits),
-		Z: math.Float32frombits(zBits),
-	}
-}
-
 type DataTrackerXYZChunk struct {
 	Chunk Chunk
 	Data  DataTrackerXYZChunkData
@@ -30,7 +18,16 @@ type DataTrackerXYZChunk struct {
 
 func DecodeDataTrackerXYZChunk(bytes []byte) DataTrackerXYZChunk {
 	chunk := DecodeChunk(bytes)
-	data := decodeDataTrackerXYZChunk(chunk)
+
+	xBits := binary.LittleEndian.Uint32(chunk.ChunkData[0:4])
+	yBits := binary.LittleEndian.Uint32(chunk.ChunkData[4:8])
+	zBits := binary.LittleEndian.Uint32(chunk.ChunkData[8:12])
+
+	data := DataTrackerXYZChunkData{
+		X: math.Float32frombits(xBits),
+		Y: math.Float32frombits(yBits),
+		Z: math.Float32frombits(zBits),
+	}
 
 	return DataTrackerXYZChunk{
 		Chunk: chunk,

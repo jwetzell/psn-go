@@ -9,14 +9,6 @@ type DataTrackerStatusChunkData struct {
 	Validity float32
 }
 
-func decodeDataTrackerStatusChunk(dataTrackerStatusChunk Chunk) DataTrackerStatusChunkData {
-	statusBits := binary.LittleEndian.Uint32(dataTrackerStatusChunk.ChunkData[0:4])
-
-	return DataTrackerStatusChunkData{
-		Validity: math.Float32frombits(statusBits),
-	}
-}
-
 type DataTrackerStatusChunk struct {
 	Chunk Chunk
 	Data  DataTrackerStatusChunkData
@@ -24,7 +16,12 @@ type DataTrackerStatusChunk struct {
 
 func DecodeDataTrackerStatusChunk(bytes []byte) DataTrackerStatusChunk {
 	chunk := DecodeChunk(bytes)
-	data := decodeDataTrackerStatusChunk(chunk)
+
+	statusBits := binary.LittleEndian.Uint32(chunk.ChunkData[0:4])
+
+	data := DataTrackerStatusChunkData{
+		Validity: math.Float32frombits(statusBits),
+	}
 
 	return DataTrackerStatusChunk{
 		Chunk: chunk,

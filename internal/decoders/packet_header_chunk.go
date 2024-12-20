@@ -10,22 +10,6 @@ type PacketHeaderChunkData struct {
 	FramePacketCount uint8
 }
 
-func decodePacketHeaderChunkData(packetHeaderChunk Chunk) PacketHeaderChunkData {
-	packet_timestamp := binary.LittleEndian.Uint64(packetHeaderChunk.ChunkData[0:8])
-	version_high := packetHeaderChunk.ChunkData[8]
-	version_low := packetHeaderChunk.ChunkData[9]
-	frame_id := packetHeaderChunk.ChunkData[10]
-	frame_packet_count := packetHeaderChunk.ChunkData[11]
-
-	return PacketHeaderChunkData{
-		PacketTimestamp:  packet_timestamp,
-		VersionHigh:      version_high,
-		VersionLow:       version_low,
-		FrameId:          frame_id,
-		FramePacketCount: frame_packet_count,
-	}
-}
-
 type PacketHeaderChunk struct {
 	Chunk Chunk
 	Data  PacketHeaderChunkData
@@ -33,7 +17,20 @@ type PacketHeaderChunk struct {
 
 func DecodePacketHeaderChunk(bytes []byte) PacketHeaderChunk {
 	chunk := DecodeChunk(bytes)
-	data := decodePacketHeaderChunkData(chunk)
+
+	packet_timestamp := binary.LittleEndian.Uint64(chunk.ChunkData[0:8])
+	version_high := chunk.ChunkData[8]
+	version_low := chunk.ChunkData[9]
+	frame_id := chunk.ChunkData[10]
+	frame_packet_count := chunk.ChunkData[11]
+
+	data := PacketHeaderChunkData{
+		PacketTimestamp:  packet_timestamp,
+		VersionHigh:      version_high,
+		VersionLow:       version_low,
+		FrameId:          frame_id,
+		FramePacketCount: frame_packet_count,
+	}
 
 	return PacketHeaderChunk{
 		Chunk: chunk,

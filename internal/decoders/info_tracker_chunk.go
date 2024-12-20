@@ -9,17 +9,23 @@ type InfoTrackerChunkData struct {
 	TrackerName *InfoTrackerNameChunk
 }
 
-func decodeInfoTrackerChunkData(infoTrackerChunk Chunk) InfoTrackerChunkData {
+type InfoTrackerChunk struct {
+	Chunk Chunk
+	Data  InfoTrackerChunkData
+}
+
+func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
+	chunk := DecodeChunk(bytes)
 	data := InfoTrackerChunkData{}
 
-	if infoTrackerChunk.Header.HasSubchunks && infoTrackerChunk.ChunkData != nil && infoTrackerChunk.Header.DataLen > 0 {
+	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
 		offset := 0
 
-		for offset < int(infoTrackerChunk.Header.DataLen) {
+		for offset < int(chunk.Header.DataLen) {
 
-			switch id := binary.LittleEndian.Uint16(infoTrackerChunk.ChunkData[offset : offset+2]); id {
+			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
 			case 0:
-				tracker_name := DecodeInfoTrackerNameChunk(infoTrackerChunk.ChunkData[offset:])
+				tracker_name := DecodeInfoTrackerNameChunk(chunk.ChunkData[offset:])
 				data.TrackerName = &tracker_name
 				offset += 4
 				if tracker_name.Chunk.Header.DataLen > 0 {
@@ -30,17 +36,6 @@ func decodeInfoTrackerChunkData(infoTrackerChunk Chunk) InfoTrackerChunkData {
 			}
 		}
 	}
-	return data
-}
-
-type InfoTrackerChunk struct {
-	Chunk Chunk
-	Data  InfoTrackerChunkData
-}
-
-func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
-	chunk := DecodeChunk(bytes)
-	data := decodeInfoTrackerChunkData(chunk)
 
 	return InfoTrackerChunk{
 		Chunk: chunk,

@@ -4,12 +4,19 @@ type InfoTrackerListChunkData struct {
 	Trackers []InfoTrackerChunk
 }
 
-func decodeInfoTrackerListChunkData(infoTrackerListChunk Chunk) InfoTrackerListChunkData {
-	var trackers []InfoTrackerChunk
-	if infoTrackerListChunk.Header.HasSubchunks && infoTrackerListChunk.Header.DataLen > 0 {
+type InfoTrackerListChunk struct {
+	Chunk Chunk
+	Data  InfoTrackerListChunkData
+}
+
+func DecodeInfoTrackerListChunk(bytes []byte) InfoTrackerListChunk {
+	chunk := DecodeChunk(bytes)
+
+	trackers := []InfoTrackerChunk{}
+	if chunk.Header.HasSubchunks && chunk.Header.DataLen > 0 {
 		offset := 0
-		for offset < int(infoTrackerListChunk.Header.DataLen) {
-			trackerChunk := DecodeInfoTrackerChunk(infoTrackerListChunk.ChunkData[offset:])
+		for offset < int(chunk.Header.DataLen) {
+			trackerChunk := DecodeInfoTrackerChunk(chunk.ChunkData[offset:])
 			offset += 4
 			if trackerChunk.Chunk.Header.DataLen > 0 {
 				offset += int(trackerChunk.Chunk.Header.DataLen)
@@ -18,19 +25,9 @@ func decodeInfoTrackerListChunkData(infoTrackerListChunk Chunk) InfoTrackerListC
 		}
 	}
 
-	return InfoTrackerListChunkData{
+	data := InfoTrackerListChunkData{
 		Trackers: trackers,
 	}
-}
-
-type InfoTrackerListChunk struct {
-	Chunk Chunk
-	Data  InfoTrackerListChunkData
-}
-
-func DecodeInfoTrackerListChunk(bytes []byte) InfoTrackerListChunk {
-	chunk := DecodeChunk(bytes)
-	data := decodeInfoTrackerListChunkData(chunk)
 
 	return InfoTrackerListChunk{
 		Chunk: chunk,
