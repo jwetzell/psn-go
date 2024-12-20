@@ -22,14 +22,14 @@ func decodeDataPacketChunkData(dataPacketChunk Chunk) DataPacketChunkData {
 			case 0:
 				packet_header := DecodePacketHeaderChunk(dataPacketChunk.ChunkData[offset:])
 				data.PacketHeader = &packet_header
-				offset = offset + CHUNK_HEADER_SIZE
+				offset += 4
 				if packet_header.Chunk.Header.DataLen > 0 {
 					offset = offset + int(packet_header.Chunk.Header.DataLen)
 				}
 			case 1:
 				tracker_list := DecodeDataTrackerListChunk(dataPacketChunk.ChunkData[offset:])
 				data.TrackerList = &tracker_list
-				offset = offset + CHUNK_HEADER_SIZE
+				offset += 4
 				if tracker_list.Chunk.Header.DataLen > 0 {
 					offset = offset + int(tracker_list.Chunk.Header.DataLen)
 				}

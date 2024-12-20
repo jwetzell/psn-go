@@ -21,7 +21,7 @@ func decodeInfoTrackerChunkData(infoTrackerChunk Chunk) InfoTrackerChunkData {
 			case 0:
 				tracker_name := DecodeInfoTrackerNameChunk(infoTrackerChunk.ChunkData[offset:])
 				data.TrackerName = &tracker_name
-				offset = offset + CHUNK_HEADER_SIZE
+				offset += 4
 				if tracker_name.Chunk.Header.DataLen > 0 {
 					offset = offset + int(tracker_name.Chunk.Header.DataLen)
 				}

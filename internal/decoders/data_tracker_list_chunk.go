@@ -10,7 +10,7 @@ func decodeDataTrackerListChunkData(dataTrackerListChunk Chunk) DataTrackerListC
 		offset := 0
 		for offset < int(dataTrackerListChunk.Header.DataLen) {
 			trackerChunk := DecodeDataTrackerChunk(dataTrackerListChunk.ChunkData[offset:])
-			offset += CHUNK_HEADER_SIZE
+			offset += 4
 			if trackerChunk.Chunk.Header.DataLen > 0 {
 				offset += int(trackerChunk.Chunk.Header.DataLen)
 			}
