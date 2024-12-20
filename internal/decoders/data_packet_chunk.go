@@ -44,7 +44,7 @@ func decodeDataPacketChunkData(dataPacketChunk Chunk) DataPacketChunkData {
 
 type DataPacketChunk struct {
 	Chunk Chunk
-	Data  DataPacketChunkData `json:"data"`
+	Data  DataPacketChunkData
 }
 
 func DecodeDataPacketChunk(bytes []byte) DataPacketChunk {

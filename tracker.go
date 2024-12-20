@@ -6,9 +6,9 @@ import (
 )
 
 type XYZData struct {
-	X float32 `json:"x"`
-	Y float32 `json:"y"`
-	Z float32 `json:"z"`
+	X float32
+	Y float32
+	Z float32
 }
 
 type Tracker struct {
