@@ -22,5 +22,4 @@ func DecodeInfoTrackerNameChunk(bytes []byte) InfoTrackerNameChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

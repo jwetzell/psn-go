@@ -33,5 +33,4 @@ func DecodeDataTrackerXYZChunk(bytes []byte) DataTrackerXYZChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

@@ -7,7 +7,6 @@ import (
 )
 
 func main() {
-
 	encoder := psn.Encoder{
 		SystemName:  "Server Name",
 		VersionHigh: 2,
@@ -41,5 +40,4 @@ func main() {
 		fmt.Printf("%v\n", infoPacket)
 
 	}
-
 }

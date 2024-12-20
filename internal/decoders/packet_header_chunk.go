@@ -36,5 +36,4 @@ func DecodePacketHeaderChunk(bytes []byte) PacketHeaderChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

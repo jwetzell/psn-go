@@ -25,7 +25,6 @@ func getNTrackers(n int) []psn.Tracker {
 }
 
 func main() {
-
 	testSizes := []int{1, 10, 100, 1000}
 	encoder := psn.Encoder{
 		SystemName:  "test encoder",
@@ -39,7 +38,6 @@ func main() {
 			benchmark(trackerCount, iterations, encoder, *decoder)
 		}
 	}
-
 }
 
 type BenchmarkResults struct {

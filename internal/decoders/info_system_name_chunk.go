@@ -21,5 +21,4 @@ func DecodeInfoSystemNameChunk(bytes []byte) InfoSystemNameChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

@@ -24,7 +24,6 @@ func DecodeInfoPacketChunk(bytes []byte) InfoPacketChunk {
 		offset := 0
 
 		for offset < int(chunk.Header.DataLen) {
-
 			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
 			case 0:
 				packet_header := DecodePacketHeaderChunk(chunk.ChunkData[offset:])

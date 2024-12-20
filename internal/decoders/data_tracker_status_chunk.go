@@ -27,5 +27,4 @@ func DecodeDataTrackerStatusChunk(bytes []byte) DataTrackerStatusChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

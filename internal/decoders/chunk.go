@@ -39,5 +39,4 @@ func DecodeChunk(bytes []byte) Chunk {
 		Header:    header,
 		ChunkData: chunk_data,
 	}
-
 }

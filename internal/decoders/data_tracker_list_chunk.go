@@ -32,5 +32,4 @@ func DecodeDataTrackerListChunk(bytes []byte) DataTrackerListChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

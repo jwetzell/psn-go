@@ -26,5 +26,4 @@ func DecodeDataTrackerTimestampChunk(bytes []byte) DataTrackerTimestampChunk {
 		Chunk: chunk,
 		Data:  data,
 	}
-
 }

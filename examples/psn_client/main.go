@@ -16,7 +16,6 @@ func main() {
 	}
 
 	client, err := net.ListenMulticastUDP("udp", nil, addr)
-
 	if err != nil {
 		fmt.Printf("Error %v\n", err)
 		return
@@ -31,7 +30,6 @@ func main() {
 		buffer := make([]byte, 2048)
 
 		length, _, err := client.ReadFromUDP(buffer)
-
 		if err != nil {
 			fmt.Printf("Error %v", err)
 		}

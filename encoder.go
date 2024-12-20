@@ -59,7 +59,6 @@ func (e *Encoder) GetInfoPackets(timestamp uint64, trackers []Tracker) [][]byte 
 }
 
 func (e *Encoder) GetDataPackets(timestamp uint64, trackers []Tracker) [][]byte {
-
 	trackerChunks := [][]byte{}
 
 	for _, tracker := range trackers {

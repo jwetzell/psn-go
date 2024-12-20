@@ -3,7 +3,6 @@ package encoders
 import "encoding/binary"
 
 func EncodeChunk(id uint16, chunkData []byte, hasSubchunks bool) []byte {
-
 	header := []byte{}
 
 	header = binary.LittleEndian.AppendUint16(header, id)

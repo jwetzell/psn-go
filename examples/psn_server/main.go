@@ -11,7 +11,6 @@ import (
 
 func main() {
 	client, err := net.Dial("udp", "236.10.10.10:56565")
-
 	if err != nil {
 		fmt.Printf("Error %v\n", err)
 		return
@@ -81,5 +80,4 @@ func main() {
 		}
 
 	}
-
 }
