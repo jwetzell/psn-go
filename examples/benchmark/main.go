@@ -10,8 +10,7 @@ import (
 func getNTrackers(n int) []psn.Tracker {
 	trackers := []psn.Tracker{}
 
-	index := 0
-	for index < n {
+	for index := 0; index < n; index++ {
 		tracker := psn.Tracker{Id: uint16(index), Name: "Tracker"}
 		tracker.SetPos(0, 0, 0)
 		tracker.SetSpeed(0, 0, 0)
@@ -21,14 +20,13 @@ func getNTrackers(n int) []psn.Tracker {
 		tracker.SetStatus(1.0)
 		tracker.SetTimestamp(uint64(time.Now().UnixMilli()))
 		trackers = append(trackers, tracker)
-		index += 1
 	}
 	return trackers
 }
 
 func main() {
 
-	testSizes := []int{1, 10, 100, 1000}
+	testSizes := []int{1, 10, 100, 1000, 10000}
 	encoder := psn.Encoder{
 		SystemName:  "test encoder",
 		VersionHigh: 2,
