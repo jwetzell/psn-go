@@ -65,40 +65,32 @@ func benchmark(trackerCount int, iterations int, encoder psn.Encoder, decoder ps
 
 	latestEncodedPackets := [][]byte{}
 
-	index := 0
-	for index < iterations {
+	for index := 0; index < iterations; index++ {
 		latestEncodedPackets = encoder.GetDataPackets(uint64(timestamp), trackers)
-		index += 1
 	}
 	benchmarkResults.data.encode = float64(time.Now().UnixMicro()-dataEncoderStart) / 1000.0
 
 	_ = latestEncodedPackets
 	dataDecodedStart := time.Now().UnixMicro()
-	index = 0
-	for index < iterations {
+	for index := 0; index < iterations; index++ {
 		for _, packet := range latestEncodedPackets {
 			decoder.Decode(packet)
 		}
-		index += 1
 	}
 	benchmarkResults.data.decode = float64(time.Now().UnixMicro()-dataDecodedStart) / 1000.0
 
 	// INFO
 	infoEncoderStart := time.Now().UnixMicro()
-	index = 0
-	for index < iterations {
+	for index := 0; index < iterations; index++ {
 		latestEncodedPackets = encoder.GetInfoPackets(uint64(timestamp), trackers)
-		index += 1
 	}
 	benchmarkResults.info.encode = float64(time.Now().UnixMicro()-infoEncoderStart) / 1000.0
 
 	infoDecodeStart := time.Now().UnixMicro()
-	index = 0
-	for index < iterations {
+	for index := 0; index < iterations; index++ {
 		for _, packet := range latestEncodedPackets {
 			decoder.Decode(packet)
 		}
-		index += 1
 	}
 	benchmarkResults.info.decode = float64(time.Now().UnixMicro()-infoDecodeStart) / 1000.0
 
