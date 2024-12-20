@@ -23,7 +23,7 @@ func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
 
 		for offset < int(chunk.Header.DataLen) {
 			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
-			case 0:
+			case 0x0000:
 				tracker_name := DecodeInfoTrackerNameChunk(chunk.ChunkData[offset:])
 				data.TrackerName = &tracker_name
 				offset += 4

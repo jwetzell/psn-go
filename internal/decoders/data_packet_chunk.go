@@ -24,14 +24,14 @@ func DecodeDataPacketChunk(bytes []byte) DataPacketChunk {
 
 		for offset < int(chunk.Header.DataLen) {
 			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
-			case 0:
+			case 0x0000:
 				packet_header := DecodePacketHeaderChunk(chunk.ChunkData[offset:])
 				data.PacketHeader = &packet_header
 				offset += 4
 				if packet_header.Chunk.Header.DataLen > 0 {
 					offset = offset + int(packet_header.Chunk.Header.DataLen)
 				}
-			case 1:
+			case 0x0001:
 				tracker_list := DecodeDataTrackerListChunk(chunk.ChunkData[offset:])
 				data.TrackerList = &tracker_list
 				offset += 4

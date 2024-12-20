@@ -25,21 +25,21 @@ func DecodeInfoPacketChunk(bytes []byte) InfoPacketChunk {
 
 		for offset < int(chunk.Header.DataLen) {
 			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
-			case 0:
+			case 0x0000:
 				packet_header := DecodePacketHeaderChunk(chunk.ChunkData[offset:])
 				data.PacketHeader = &packet_header
 				offset += 4
 				if packet_header.Chunk.Header.DataLen > 0 {
 					offset = offset + int(packet_header.Chunk.Header.DataLen)
 				}
-			case 1:
+			case 0x0001:
 				system_name := DecodeInfoSystemNameChunk(chunk.ChunkData[offset:])
 				data.SystemName = &system_name
 				offset += 4
 				if system_name.Chunk.Header.DataLen > 0 {
 					offset = offset + int(system_name.Chunk.Header.DataLen)
 				}
-			case 2:
+			case 0x0002:
 				tracker_list := DecodeInfoTrackerListChunk(chunk.ChunkData[offset:])
 				data.TrackerList = &tracker_list
 				offset += 4
