@@ -1,8 +1,6 @@
 package psn
 
 import (
-	"log/slog"
-
 	"github.com/jwetzell/psn-go/internal/decoders"
 )
 
@@ -52,19 +50,17 @@ func (d *Decoder) updateData(framePackets []decoders.DataPacketChunk) {
 	}
 }
 
-func (d *Decoder) Decode(bytes []byte) {
+func (d *Decoder) Decode(bytes []byte) error {
 	chunk, err := decoders.DecodeChunk(bytes)
 
 	if err != nil {
-		slog.Error("error decoding", "err", err)
-		return
+		return err
 	}
 
 	if chunk.Header.Id == 0x6756 {
 		infoPacket, err := decoders.DecodeInfoPacketChunk(bytes)
 		if err != nil {
-			slog.Error("error decoding", "err", err)
-			return
+			return err
 		}
 		currentInfoPacketHeader := infoPacket.Data.PacketHeader
 
@@ -82,8 +78,7 @@ func (d *Decoder) Decode(bytes []byte) {
 	} else if chunk.Header.Id == 0x6755 {
 		dataPacket, err := decoders.DecodeDataPacketChunk(bytes)
 		if err != nil {
-			slog.Error("error decoding", "err", err)
-			return
+			return err
 		}
 		currentInfoPacketHeader := dataPacket.Data.PacketHeader
 
@@ -99,4 +94,5 @@ func (d *Decoder) Decode(bytes []byte) {
 			delete(d.dataPacketFrames, currentInfoPacketHeader.Data.FrameId)
 		}
 	}
+	return nil
 }

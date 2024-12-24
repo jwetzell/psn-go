@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"net"
 	"time"
 
@@ -35,7 +36,10 @@ func main() {
 		}
 
 		if length > 0 {
-			decoder.Decode(buffer)
+			err := decoder.Decode(buffer)
+			if err != nil {
+				slog.Error("error decoding", "err", err)
+			}
 		}
 
 		if time.Now().UnixMilli()-lastPrintMillis > 1000 {

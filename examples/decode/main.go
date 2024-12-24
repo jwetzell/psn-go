@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"log/slog"
 
 	"github.com/jwetzell/psn-go"
 )
@@ -22,8 +23,14 @@ func main() {
 		0x80, 0x3f, 0x00, 0x00, 0x80, 0x3f,
 	}
 
-	decoder.Decode(infoPacketBytes)
-	decoder.Decode(dataPacketBytes)
+	err := decoder.Decode(infoPacketBytes)
+	if err != nil {
+		slog.Error("error decoding", "err", err)
+	}
+	err = decoder.Decode(dataPacketBytes)
+	if err != nil {
+		slog.Error("error decoding", "err", err)
+	}
 
 	fmt.Printf("decoded: %+v\n", decoder.SystemName)
 
