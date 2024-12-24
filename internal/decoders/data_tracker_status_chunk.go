@@ -2,6 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
+	"errors"
 	"math"
 )
 
@@ -14,8 +15,16 @@ type DataTrackerStatusChunk struct {
 	Data  DataTrackerStatusChunkData
 }
 
-func DecodeDataTrackerStatusChunk(bytes []byte) DataTrackerStatusChunk {
-	chunk := DecodeChunk(bytes)
+func DecodeDataTrackerStatusChunk(bytes []byte) (DataTrackerStatusChunk, error) {
+	chunk, err := DecodeChunk(bytes)
+
+	if err != nil {
+		return DataTrackerStatusChunk{}, err
+	}
+
+	if len(chunk.ChunkData) < 4 {
+		return DataTrackerStatusChunk{}, errors.New("DATA_TRACKER_STATUS chunk must be at least 4 bytes")
+	}
 
 	statusBits := binary.LittleEndian.Uint32(chunk.ChunkData[0:4])
 
@@ -24,7 +33,8 @@ func DecodeDataTrackerStatusChunk(bytes []byte) DataTrackerStatusChunk {
 	}
 
 	return DataTrackerStatusChunk{
-		Chunk: chunk,
-		Data:  data,
-	}
+			Chunk: chunk,
+			Data:  data,
+		},
+		nil
 }

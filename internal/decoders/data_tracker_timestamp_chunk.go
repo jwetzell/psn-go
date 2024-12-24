@@ -2,6 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
+	"errors"
 )
 
 type DataTrackerTimestampChunkData struct {
@@ -13,8 +14,16 @@ type DataTrackerTimestampChunk struct {
 	Data  DataTrackerTimestampChunkData
 }
 
-func DecodeDataTrackerTimestampChunk(bytes []byte) DataTrackerTimestampChunk {
-	chunk := DecodeChunk(bytes)
+func DecodeDataTrackerTimestampChunk(bytes []byte) (DataTrackerTimestampChunk, error) {
+	chunk, err := DecodeChunk(bytes)
+
+	if err != nil {
+		return DataTrackerTimestampChunk{}, err
+	}
+
+	if len(chunk.ChunkData) < 8 {
+		return DataTrackerTimestampChunk{}, errors.New("DATA_TRACKER_TIMESTAMP chunk must be at least 8 bytes")
+	}
 
 	timestamp := binary.LittleEndian.Uint64(chunk.ChunkData[0:8])
 
@@ -23,7 +32,8 @@ func DecodeDataTrackerTimestampChunk(bytes []byte) DataTrackerTimestampChunk {
 	}
 
 	return DataTrackerTimestampChunk{
-		Chunk: chunk,
-		Data:  data,
-	}
+			Chunk: chunk,
+			Data:  data,
+		},
+		nil
 }

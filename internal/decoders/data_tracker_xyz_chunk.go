@@ -2,6 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
+	"errors"
 	"math"
 )
 
@@ -16,8 +17,16 @@ type DataTrackerXYZChunk struct {
 	Data  DataTrackerXYZChunkData
 }
 
-func DecodeDataTrackerXYZChunk(bytes []byte) DataTrackerXYZChunk {
-	chunk := DecodeChunk(bytes)
+func DecodeDataTrackerXYZChunk(bytes []byte) (DataTrackerXYZChunk, error) {
+	chunk, err := DecodeChunk(bytes)
+
+	if err != nil {
+		return DataTrackerXYZChunk{}, err
+	}
+
+	if len(chunk.ChunkData) < 12 {
+		return DataTrackerXYZChunk{}, errors.New("DATA_TRACKER_XYZ chunk must be at least 12 bytes")
+	}
 
 	xBits := binary.LittleEndian.Uint32(chunk.ChunkData[0:4])
 	yBits := binary.LittleEndian.Uint32(chunk.ChunkData[4:8])
@@ -32,5 +41,5 @@ func DecodeDataTrackerXYZChunk(bytes []byte) DataTrackerXYZChunk {
 	return DataTrackerXYZChunk{
 		Chunk: chunk,
 		Data:  data,
-	}
+	}, nil
 }

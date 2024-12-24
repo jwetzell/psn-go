@@ -9,17 +9,22 @@ type InfoTrackerNameChunk struct {
 	Data  InfoTrackerNameChunkData
 }
 
-func DecodeInfoTrackerNameChunk(bytes []byte) InfoTrackerNameChunk {
-	chunk := DecodeChunk(bytes)
+func DecodeInfoTrackerNameChunk(bytes []byte) (InfoTrackerNameChunk, error) {
+	chunk, err := DecodeChunk(bytes)
 
-	tracker_name := string(chunk.ChunkData[0:chunk.Header.DataLen])
+	if err != nil {
+		return InfoTrackerNameChunk{}, err
+	}
 
-	data := InfoTrackerNameChunkData{
-		TrackerName: tracker_name,
+	data := InfoTrackerNameChunkData{}
+
+	if chunk.Header.DataLen > 0 {
+		data.TrackerName = string(chunk.ChunkData[0:chunk.Header.DataLen])
 	}
 
 	return InfoTrackerNameChunk{
-		Chunk: chunk,
-		Data:  data,
-	}
+			Chunk: chunk,
+			Data:  data,
+		},
+		nil
 }

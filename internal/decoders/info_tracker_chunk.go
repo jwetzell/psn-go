@@ -14,8 +14,11 @@ type InfoTrackerChunk struct {
 	Data  InfoTrackerChunkData
 }
 
-func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
-	chunk := DecodeChunk(bytes)
+func DecodeInfoTrackerChunk(bytes []byte) (InfoTrackerChunk, error) {
+	chunk, err := DecodeChunk(bytes)
+	if err != nil {
+		return InfoTrackerChunk{}, err
+	}
 	data := InfoTrackerChunkData{}
 
 	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
@@ -24,7 +27,10 @@ func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
 		for offset < int(chunk.Header.DataLen) {
 			switch id := binary.LittleEndian.Uint16(chunk.ChunkData[offset : offset+2]); id {
 			case 0x0000:
-				tracker_name := DecodeInfoTrackerNameChunk(chunk.ChunkData[offset:])
+				tracker_name, err := DecodeInfoTrackerNameChunk(chunk.ChunkData[offset:])
+				if err != nil {
+					return InfoTrackerChunk{}, err
+				}
 				data.TrackerName = &tracker_name
 				offset += 4
 				if tracker_name.Chunk.Header.DataLen > 0 {
@@ -37,7 +43,8 @@ func DecodeInfoTrackerChunk(bytes []byte) InfoTrackerChunk {
 	}
 
 	return InfoTrackerChunk{
-		Chunk: chunk,
-		Data:  data,
-	}
+			Chunk: chunk,
+			Data:  data,
+		},
+		nil
 }

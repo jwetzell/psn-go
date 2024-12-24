@@ -2,6 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
+	"errors"
 )
 
 type ChunkHeader struct {
@@ -15,7 +16,12 @@ type Chunk struct {
 	ChunkData []byte
 }
 
-func DecodeChunk(bytes []byte) Chunk {
+func DecodeChunk(bytes []byte) (Chunk, error) {
+
+	if len(bytes) < 4 {
+		return Chunk{}, errors.New("chunk must be at least 4 bytes")
+	}
+
 	id := binary.LittleEndian.Uint16(bytes[0:2])
 	lengthAndFlag := binary.LittleEndian.Uint16(bytes[2:4])
 
@@ -38,5 +44,5 @@ func DecodeChunk(bytes []byte) Chunk {
 	return Chunk{
 		Header:    header,
 		ChunkData: chunk_data,
-	}
+	}, nil
 }

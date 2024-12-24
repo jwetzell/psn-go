@@ -15,8 +15,11 @@ type PacketHeaderChunk struct {
 	Data  PacketHeaderChunkData
 }
 
-func DecodePacketHeaderChunk(bytes []byte) PacketHeaderChunk {
-	chunk := DecodeChunk(bytes)
+func DecodePacketHeaderChunk(bytes []byte) (PacketHeaderChunk, error) {
+	chunk, err := DecodeChunk(bytes)
+	if err != nil {
+		return PacketHeaderChunk{}, err
+	}
 
 	packet_timestamp := binary.LittleEndian.Uint64(chunk.ChunkData[0:8])
 	version_high := chunk.ChunkData[8]
@@ -33,7 +36,8 @@ func DecodePacketHeaderChunk(bytes []byte) PacketHeaderChunk {
 	}
 
 	return PacketHeaderChunk{
-		Chunk: chunk,
-		Data:  data,
-	}
+			Chunk: chunk,
+			Data:  data,
+		},
+		nil
 }

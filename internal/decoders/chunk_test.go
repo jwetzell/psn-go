@@ -56,7 +56,12 @@ func TestChunkDecoding(t *testing.T) {
 
 	for _, testCase := range testCases {
 
-		actual := DecodeChunk(testCase.bytes)
+		actual, err := DecodeChunk(testCase.bytes)
+
+		if err != nil {
+			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
+			fmt.Println(err)
+		}
 
 		if !reflect.DeepEqual(actual, testCase.expected) {
 			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
