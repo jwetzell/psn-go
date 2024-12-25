@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log/slog"
 	"math"
 	"net"
 	"time"
@@ -45,7 +46,7 @@ func main() {
 
 	for {
 		if (time.Now().UnixMilli() - lastInfoMillis) > 500 {
-			fmt.Println("Sending Info Packets")
+			slog.Info("Sending Info Packets")
 			infoPackets := encoder.GetInfoPackets(uint64(timestamp), trackers)
 			for _, infoPacket := range infoPackets {
 				client.Write(infoPacket)
@@ -70,7 +71,7 @@ func main() {
 				trackers[index].SetTimestamp(uint64(timestamp))
 			}
 
-			fmt.Println("Sending Data Packets")
+			slog.Info("Sending Data Packets")
 			dataPackets := encoder.GetDataPackets(uint64(timestamp), trackers)
 			for _, DataPacket := range dataPackets {
 				client.Write(DataPacket)

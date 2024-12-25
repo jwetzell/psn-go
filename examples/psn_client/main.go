@@ -12,13 +12,13 @@ import (
 func main() {
 	addr, err := net.ResolveUDPAddr("udp", "236.10.10.10:56565")
 	if err != nil {
-		fmt.Printf("Error %v\n", err)
+		slog.Error("error making UDP address", "err", err)
 		return
 	}
 
 	client, err := net.ListenMulticastUDP("udp", nil, addr)
 	if err != nil {
-		fmt.Printf("Error %v\n", err)
+		slog.Error("error listening to UDP", "err", err)
 		return
 	}
 	defer client.Close()
@@ -32,7 +32,7 @@ func main() {
 
 		length, _, err := client.ReadFromUDP(buffer)
 		if err != nil {
-			fmt.Printf("Error %v", err)
+			slog.Error("error reading from UDP", "err", err)
 		}
 
 		if length > 0 {
