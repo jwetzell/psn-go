@@ -32,7 +32,7 @@ func main() {
 		slog.Error("error decoding", "err", err)
 	}
 
-	fmt.Printf("decoded: %+v\n", decoder.SystemName)
+	fmt.Printf("decoded system name: %s\n", decoder.SystemName)
 
 	trackers, err := json.MarshalIndent(decoder.Trackers, "", "  ")
 	if err != nil {
@@ -40,5 +40,5 @@ func main() {
 		return
 	}
 
-	fmt.Println(string(trackers))
+	fmt.Printf("decoded trackers: \n%s\n", string(trackers))
 }
