@@ -10,8 +10,8 @@ type InfoTrackerChunkData struct {
 }
 
 type InfoTrackerChunk struct {
-	Chunk Chunk
 	Data  InfoTrackerChunkData
+	Chunk Chunk
 }
 
 func DecodeInfoTrackerChunk(bytes []byte) (InfoTrackerChunk, error) {

@@ -12,8 +12,8 @@ type InfoPacketChunkData struct {
 }
 
 type InfoPacketChunk struct {
-	Chunk Chunk
 	Data  InfoPacketChunkData
+	Chunk Chunk
 }
 
 func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {

@@ -12,8 +12,6 @@ type XYZData struct {
 }
 
 type Tracker struct {
-	Id        uint16
-	Name      string
 	Pos       *XYZData
 	Speed     *XYZData
 	Ori       *XYZData
@@ -21,6 +19,8 @@ type Tracker struct {
 	Accel     *XYZData
 	TrgtPos   *XYZData
 	Timestamp *uint64
+	Name      string
+	Id        uint16
 }
 
 func (t *Tracker) SetPos(x float32, y float32, z float32) {

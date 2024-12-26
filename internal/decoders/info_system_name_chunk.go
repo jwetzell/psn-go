@@ -5,8 +5,8 @@ type InfoSystemNameChunkData struct {
 }
 
 type InfoSystemNameChunk struct {
-	Chunk Chunk
 	Data  InfoSystemNameChunkData
+	Chunk Chunk
 }
 
 func DecodeInfoSystemNameChunk(bytes []byte) (InfoSystemNameChunk, error) {

@@ -16,8 +16,8 @@ type DataTrackerChunkData struct {
 }
 
 type DataTrackerChunk struct {
-	Chunk Chunk
 	Data  DataTrackerChunkData
+	Chunk Chunk
 }
 
 func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {

@@ -12,8 +12,8 @@ type ChunkHeader struct {
 }
 
 type Chunk struct {
-	Header    ChunkHeader
 	ChunkData []byte
+	Header    ChunkHeader
 }
 
 func DecodeChunk(bytes []byte) (Chunk, error) {
