@@ -7,8 +7,6 @@ on:
   push:
     branches:
       - 'main'
-    paths:
-      - 'internal/decoders/**'
 
 jobs:
   test_decoders:
