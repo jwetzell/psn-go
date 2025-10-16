@@ -19,7 +19,7 @@ jobs:
       - name: Setup Go
         uses: actions/setup-go@v4
         with:
-          go-version: ^1.23
+          go-version-file: "./go.mod"
 
       - name: Test
         run: go test -cover -coverprofile=decoders_coverage.txt ./internal/decoders/...
@@ -28,19 +28,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: decoders-code-coverage
-          path: decoders_coverage.txt # Make sure to use the same file name you chose for the "-coverprofile" in the "Test" step
-
-  code_coverage:
-    name: "Code coverage report"
-    if: github.event_name == 'pull_request' # Do not run when workflow is triggered by push to main branch
-    runs-on: ubuntu-latest
-    needs: test_decoders
-    permissions:
-      contents:      read
-      actions:       read
-      pull-requests: write
-    steps:
-      - uses: fgrosse/go-coverage-report@v1.1.1 # Consider using a Git revision for maximum security
-        with:
-          coverage-artifact-name: "decoders-code-coverage" # can be omitted if you used this default value
-          coverage-file-name: "decoders_coverage.txt" # can be omitted if you used this default value
+          path: decoders_coverage.txt
