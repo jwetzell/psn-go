@@ -1,0 +1,31 @@
+name: "Test Encoders"
+on:
+  pull_request:
+    types: [opened, reopened, synchronize]
+    paths:
+      - 'internal/encoders/**'
+  push:
+    branches:
+      - 'main'
+
+jobs:
+  test_encoders:
+    name: "test encoders"
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Go
+        uses: actions/setup-go@v4
+        with:
+          go-version-file: "./go.mod"
+
+      - name: Test
+        run: go test -cover -coverprofile=encoders_coverage.txt ./internal/encoders/...
+
+      - name: Archive code coverage results
+        uses: actions/upload-artifact@v4
+        with:
+          name: encoders-code-coverage
+          path: encoders_coverage.txt
