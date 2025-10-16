@@ -3,10 +3,11 @@ package decoders
 import (
 	"fmt"
 	"reflect"
+	"strings"
 	"testing"
 )
 
-func TestChunkDecoding(t *testing.T) {
+func TestGoodChunkDecoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
@@ -68,5 +69,35 @@ func TestChunkDecoding(t *testing.T) {
 			fmt.Printf("expected: %v\n", testCase.expected)
 			fmt.Printf("actual: %v\n", actual)
 		}
+	}
+}
+
+func TestBadChunkDecoding(t *testing.T) {
+	testCases := []struct {
+		description        string
+		bytes              []byte
+		errorShouldContain string
+	}{
+		{
+			description:        "empty packet",
+			bytes:              []byte{},
+			errorShouldContain: "must be at least 4 bytes",
+		},
+	}
+
+	for _, testCase := range testCases {
+
+		_, err := DecodeChunk(testCase.bytes)
+
+		if err == nil {
+			t.Errorf("Test '%s' should have failed fail to decode chunk properly", testCase.description)
+		}
+
+		if !strings.Contains(err.Error(), testCase.errorShouldContain) {
+			t.Errorf("Test '%s' did not return the correct error", testCase.description)
+			fmt.Printf("expected: %v\n", testCase.errorShouldContain)
+			fmt.Printf("actual: %v\n", err.Error())
+		}
+
 	}
 }
