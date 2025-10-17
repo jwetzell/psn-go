@@ -4,38 +4,40 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodInfoTrackerListChunkDecoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    InfoTrackerListChunk
+		expected    chunks.InfoTrackerListChunk
 	}{
 		{
 			description: "InfoTrackerListChunk",
 			bytes: []byte{
 				2, 0, 17, 128, 1, 0, 13, 128, 0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49,
 			},
-			expected: InfoTrackerListChunk{
-				Chunk: Chunk{
+			expected: chunks.InfoTrackerListChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{1, 0, 13, 128, 0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49},
-					Header:    ChunkHeader{DataLen: 17, Id: 2, HasSubchunks: true},
+					Header:    chunks.ChunkHeader{DataLen: 17, Id: 2, HasSubchunks: true},
 				},
-				Data: InfoTrackerListChunkData{
-					Trackers: []InfoTrackerChunk{
+				Data: chunks.InfoTrackerListChunkData{
+					Trackers: []chunks.InfoTrackerChunk{
 						{
-							Chunk: Chunk{
+							Chunk: chunks.Chunk{
 								ChunkData: []byte{0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49},
-								Header:    ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
+								Header:    chunks.ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
 							},
-							Data: InfoTrackerChunkData{
-								TrackerName: &InfoTrackerNameChunk{
-									Chunk: Chunk{
+							Data: chunks.InfoTrackerChunkData{
+								TrackerName: &chunks.InfoTrackerNameChunk{
+									Chunk: chunks.Chunk{
 										ChunkData: []byte{84, 114, 97, 99, 107, 101, 114, 32, 49},
-										Header:    ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
+										Header:    chunks.ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
 									},
-									Data: InfoTrackerNameChunkData{
+									Data: chunks.InfoTrackerNameChunkData{
 										TrackerName: "Tracker 1",
 									},
 								},

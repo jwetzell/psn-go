@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestDataTrackerStatusChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.DataTrackerStatusChunkData
+		data        chunks.DataTrackerStatusChunkData
 	}{
 		{
 			description: "basic status",
 			expected: []byte{
 				3, 0, 4, 0, 0, 0, 128, 63,
 			},
-			data: decoders.DataTrackerStatusChunkData{
+			data: chunks.DataTrackerStatusChunkData{
 				Validity: 1,
 			},
 		},

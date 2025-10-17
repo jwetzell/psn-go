@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestInfoTrackerNameChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.InfoTrackerNameChunkData
+		data        chunks.InfoTrackerNameChunkData
 	}{
 		{
 			description: "InfoTrackerNameChunk",
 			expected: []byte{
 				0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49,
 			},
-			data: decoders.InfoTrackerNameChunkData{
+			data: chunks.InfoTrackerNameChunkData{
 				TrackerName: "Tracker 1",
 			},
 		},

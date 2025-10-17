@@ -3,23 +3,14 @@ package decoders
 import (
 	"encoding/binary"
 	"errors"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
-type ChunkHeader struct {
-	Id           uint16
-	DataLen      uint16
-	HasSubchunks bool
-}
-
-type Chunk struct {
-	ChunkData []byte
-	Header    ChunkHeader
-}
-
-func DecodeChunk(bytes []byte) (Chunk, error) {
+func DecodeChunk(bytes []byte) (chunks.Chunk, error) {
 
 	if len(bytes) < 4 {
-		return Chunk{}, errors.New("chunk must be at least 4 bytes")
+		return chunks.Chunk{}, errors.New("chunk must be at least 4 bytes")
 	}
 
 	id := binary.LittleEndian.Uint16(bytes[0:2])
@@ -33,7 +24,7 @@ func DecodeChunk(bytes []byte) (Chunk, error) {
 		data_len = data_len - 32768
 	}
 
-	header := ChunkHeader{
+	header := chunks.ChunkHeader{
 		Id:           id,
 		DataLen:      data_len,
 		HasSubchunks: has_subchunks,
@@ -41,7 +32,7 @@ func DecodeChunk(bytes []byte) (Chunk, error) {
 
 	chunk_data := bytes[4 : 4+header.DataLen]
 
-	return Chunk{
+	return chunks.Chunk{
 		Header:    header,
 		ChunkData: chunk_data,
 	}, nil

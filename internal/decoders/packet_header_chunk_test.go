@@ -4,25 +4,27 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodPacketHeaderChunkDecoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    PacketHeaderChunk
+		expected    chunks.PacketHeaderChunk
 	}{
 		{
 			description: "PacketHeaderChunk",
 			bytes: []byte{
 				0, 0, 12, 0, 210, 2, 150, 73, 0, 0, 0, 0, 2, 3, 1, 123,
 			},
-			expected: PacketHeaderChunk{
-				Chunk: Chunk{
+			expected: chunks.PacketHeaderChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{210, 2, 150, 73, 0, 0, 0, 0, 2, 3, 1, 123},
-					Header:    ChunkHeader{DataLen: 12, Id: 0, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 0, HasSubchunks: false},
 				},
-				Data: PacketHeaderChunkData{
+				Data: chunks.PacketHeaderChunkData{
 					PacketTimestamp:  1234567890,
 					VersionHigh:      2,
 					VersionLow:       3,

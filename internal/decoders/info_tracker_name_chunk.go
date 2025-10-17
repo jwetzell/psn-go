@@ -1,28 +1,21 @@
 package decoders
 
-type InfoTrackerNameChunkData struct {
-	TrackerName string
-}
+import "github.com/jwetzell/psn-go/internal/chunks"
 
-type InfoTrackerNameChunk struct {
-	Data  InfoTrackerNameChunkData
-	Chunk Chunk
-}
-
-func DecodeInfoTrackerNameChunk(bytes []byte) (InfoTrackerNameChunk, error) {
+func DecodeInfoTrackerNameChunk(bytes []byte) (chunks.InfoTrackerNameChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 
 	if err != nil {
-		return InfoTrackerNameChunk{}, err
+		return chunks.InfoTrackerNameChunk{}, err
 	}
 
-	data := InfoTrackerNameChunkData{}
+	data := chunks.InfoTrackerNameChunkData{}
 
 	if chunk.Header.DataLen > 0 {
 		data.TrackerName = string(chunk.ChunkData[0:chunk.Header.DataLen])
 	}
 
-	return InfoTrackerNameChunk{
+	return chunks.InfoTrackerNameChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

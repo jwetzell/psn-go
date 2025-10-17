@@ -4,25 +4,27 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodInfoSystemNameChunkDecoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    InfoSystemNameChunk
+		expected    chunks.InfoSystemNameChunk
 	}{
 		{
 			description: "InfoSystemNameChunk",
 			bytes: []byte{
 				1, 0, 10, 0, 80, 83, 78, 32, 83, 101, 114, 118, 101, 114,
 			},
-			expected: InfoSystemNameChunk{
-				Chunk: Chunk{
+			expected: chunks.InfoSystemNameChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{80, 83, 78, 32, 83, 101, 114, 118, 101, 114},
-					Header:    ChunkHeader{DataLen: 10, Id: 1, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 10, Id: 1, HasSubchunks: false},
 				},
-				Data: InfoSystemNameChunkData{
+				Data: chunks.InfoSystemNameChunkData{
 					SystemName: "PSN Server",
 				},
 			},

@@ -5,39 +5,39 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestInfoTrackerListChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		chunk       decoders.InfoTrackerListChunk
+		chunk       chunks.InfoTrackerListChunk
 	}{
 		{
 			description: "InfoTrackerListChunk",
 			expected: []byte{
 				2, 0, 17, 128, 1, 0, 13, 128, 0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49,
 			},
-			chunk: decoders.InfoTrackerListChunk{
-				Chunk: decoders.Chunk{
+			chunk: chunks.InfoTrackerListChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{1, 0, 13, 128, 0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49},
-					Header:    decoders.ChunkHeader{DataLen: 17, Id: 2, HasSubchunks: true},
+					Header:    chunks.ChunkHeader{DataLen: 17, Id: 2, HasSubchunks: true},
 				},
-				Data: decoders.InfoTrackerListChunkData{
-					Trackers: []decoders.InfoTrackerChunk{
+				Data: chunks.InfoTrackerListChunkData{
+					Trackers: []chunks.InfoTrackerChunk{
 						{
-							Chunk: decoders.Chunk{
+							Chunk: chunks.Chunk{
 								ChunkData: []byte{0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49},
-								Header:    decoders.ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
+								Header:    chunks.ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
 							},
-							Data: decoders.InfoTrackerChunkData{
-								TrackerName: &decoders.InfoTrackerNameChunk{
-									Chunk: decoders.Chunk{
+							Data: chunks.InfoTrackerChunkData{
+								TrackerName: &chunks.InfoTrackerNameChunk{
+									Chunk: chunks.Chunk{
 										ChunkData: []byte{84, 114, 97, 99, 107, 101, 114, 32, 49},
-										Header:    decoders.ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
+										Header:    chunks.ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
 									},
-									Data: decoders.InfoTrackerNameChunkData{
+									Data: chunks.InfoTrackerNameChunkData{
 										TrackerName: "Tracker 1",
 									},
 								},

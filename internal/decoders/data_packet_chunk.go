@@ -3,26 +3,18 @@ package decoders
 import (
 	"encoding/binary"
 	"log/slog"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
-type DataPacketChunkData struct {
-	PacketHeader *PacketHeaderChunk
-	TrackerList  *DataTrackerListChunk
-}
-
-type DataPacketChunk struct {
-	Data  DataPacketChunkData
-	Chunk Chunk
-}
-
-func DecodeDataPacketChunk(bytes []byte) (DataPacketChunk, error) {
+func DecodeDataPacketChunk(bytes []byte) (chunks.DataPacketChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 
 	if err != nil {
-		return DataPacketChunk{}, err
+		return chunks.DataPacketChunk{}, err
 	}
 
-	data := DataPacketChunkData{}
+	data := chunks.DataPacketChunkData{}
 
 	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
 		offset := 0
@@ -32,7 +24,7 @@ func DecodeDataPacketChunk(bytes []byte) (DataPacketChunk, error) {
 			case 0x0000:
 				packet_header, err := DecodePacketHeaderChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataPacketChunk{}, err
+					return chunks.DataPacketChunk{}, err
 				}
 				data.PacketHeader = &packet_header
 				offset += 4
@@ -42,7 +34,7 @@ func DecodeDataPacketChunk(bytes []byte) (DataPacketChunk, error) {
 			case 0x0001:
 				tracker_list, err := DecodeDataTrackerListChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataPacketChunk{}, err
+					return chunks.DataPacketChunk{}, err
 				}
 				data.TrackerList = &tracker_list
 				offset += 4
@@ -56,7 +48,7 @@ func DecodeDataPacketChunk(bytes []byte) (DataPacketChunk, error) {
 		}
 	}
 
-	return DataPacketChunk{
+	return chunks.DataPacketChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

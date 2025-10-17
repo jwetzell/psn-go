@@ -1,27 +1,21 @@
 package decoders
 
-type DataTrackerListChunkData struct {
-	Trackers []DataTrackerChunk
-}
-type DataTrackerListChunk struct {
-	Chunk Chunk
-	Data  DataTrackerListChunkData
-}
+import "github.com/jwetzell/psn-go/internal/chunks"
 
-func DecodeDataTrackerListChunk(bytes []byte) (DataTrackerListChunk, error) {
+func DecodeDataTrackerListChunk(bytes []byte) (chunks.DataTrackerListChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 
 	if err != nil {
-		return DataTrackerListChunk{}, err
+		return chunks.DataTrackerListChunk{}, err
 	}
 
-	trackers := []DataTrackerChunk{}
+	trackers := []chunks.DataTrackerChunk{}
 	if chunk.Header.HasSubchunks && chunk.Header.DataLen > 0 {
 		offset := 0
 		for offset < int(chunk.Header.DataLen) {
 			trackerChunk, err := DecodeDataTrackerChunk(chunk.ChunkData[offset:])
 			if err != nil {
-				return DataTrackerListChunk{}, err
+				return chunks.DataTrackerListChunk{}, err
 			}
 			offset += 4
 			if trackerChunk.Chunk.Header.DataLen > 0 {
@@ -31,11 +25,11 @@ func DecodeDataTrackerListChunk(bytes []byte) (DataTrackerListChunk, error) {
 		}
 	}
 
-	data := DataTrackerListChunkData{
+	data := chunks.DataTrackerListChunkData{
 		Trackers: trackers,
 	}
 
-	return DataTrackerListChunk{
+	return chunks.DataTrackerListChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

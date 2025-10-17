@@ -1,27 +1,28 @@
 package psn
 
 import (
+	"github.com/jwetzell/psn-go/internal/chunks"
 	"github.com/jwetzell/psn-go/internal/decoders"
 )
 
 type Decoder struct {
-	lastInfoPacketHeader *decoders.PacketHeaderChunk
-	lastDataPacketHeader *decoders.PacketHeaderChunk
-	infoPacketFrames     map[uint8][]decoders.InfoPacketChunk
-	dataPacketFrames     map[uint8][]decoders.DataPacketChunk
+	lastInfoPacketHeader *chunks.PacketHeaderChunk
+	lastDataPacketHeader *chunks.PacketHeaderChunk
+	infoPacketFrames     map[uint8][]chunks.InfoPacketChunk
+	dataPacketFrames     map[uint8][]chunks.DataPacketChunk
 	Trackers             map[uint16]*Tracker
 	SystemName           string
 }
 
 func NewDecoder() *Decoder {
 	var decoder Decoder
-	decoder.infoPacketFrames = map[uint8][]decoders.InfoPacketChunk{}
-	decoder.dataPacketFrames = map[uint8][]decoders.DataPacketChunk{}
+	decoder.infoPacketFrames = map[uint8][]chunks.InfoPacketChunk{}
+	decoder.dataPacketFrames = map[uint8][]chunks.DataPacketChunk{}
 	decoder.Trackers = map[uint16]*Tracker{}
 	return &decoder
 }
 
-func (d *Decoder) updateInfo(framePackets []decoders.InfoPacketChunk) {
+func (d *Decoder) updateInfo(framePackets []chunks.InfoPacketChunk) {
 	for _, framePacket := range framePackets {
 		d.SystemName = framePacket.Data.SystemName.Data.SystemName
 		for _, infoTrackerChunk := range framePacket.Data.TrackerList.Data.Trackers {
@@ -36,7 +37,7 @@ func (d *Decoder) updateInfo(framePackets []decoders.InfoPacketChunk) {
 	}
 }
 
-func (d *Decoder) updateData(framePackets []decoders.DataPacketChunk) {
+func (d *Decoder) updateData(framePackets []chunks.DataPacketChunk) {
 	for _, framePacket := range framePackets {
 		for _, dataTrackerChunk := range framePacket.Data.TrackerList.Data.Trackers {
 			tracker, ok := d.Trackers[dataTrackerChunk.Chunk.Header.Id]
@@ -67,7 +68,7 @@ func (d *Decoder) Decode(bytes []byte) error {
 		_, ok := d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId]
 
 		if !ok {
-			d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId] = []decoders.InfoPacketChunk{}
+			d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId] = []chunks.InfoPacketChunk{}
 		}
 		d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId] = append(d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId], infoPacket)
 
@@ -85,7 +86,7 @@ func (d *Decoder) Decode(bytes []byte) error {
 		_, ok := d.dataPacketFrames[currentInfoPacketHeader.Data.FrameId]
 
 		if !ok {
-			d.dataPacketFrames[currentInfoPacketHeader.Data.FrameId] = []decoders.DataPacketChunk{}
+			d.dataPacketFrames[currentInfoPacketHeader.Data.FrameId] = []chunks.DataPacketChunk{}
 		}
 		d.dataPacketFrames[currentInfoPacketHeader.Data.FrameId] = append(d.dataPacketFrames[currentInfoPacketHeader.Data.FrameId], dataPacket)
 

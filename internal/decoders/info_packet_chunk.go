@@ -3,25 +3,16 @@ package decoders
 import (
 	"encoding/binary"
 	"log/slog"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
-type InfoPacketChunkData struct {
-	PacketHeader *PacketHeaderChunk
-	SystemName   *InfoSystemNameChunk
-	TrackerList  *InfoTrackerListChunk
-}
-
-type InfoPacketChunk struct {
-	Data  InfoPacketChunkData
-	Chunk Chunk
-}
-
-func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {
+func DecodeInfoPacketChunk(bytes []byte) (chunks.InfoPacketChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 	if err != nil {
-		return InfoPacketChunk{}, err
+		return chunks.InfoPacketChunk{}, err
 	}
-	data := InfoPacketChunkData{}
+	data := chunks.InfoPacketChunkData{}
 
 	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
 		offset := 0
@@ -31,7 +22,7 @@ func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {
 			case 0x0000:
 				packet_header, err := DecodePacketHeaderChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return InfoPacketChunk{}, err
+					return chunks.InfoPacketChunk{}, err
 				}
 				data.PacketHeader = &packet_header
 				offset += 4
@@ -41,7 +32,7 @@ func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {
 			case 0x0001:
 				system_name, err := DecodeInfoSystemNameChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return InfoPacketChunk{}, err
+					return chunks.InfoPacketChunk{}, err
 				}
 				data.SystemName = &system_name
 				offset += 4
@@ -51,7 +42,7 @@ func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {
 			case 0x0002:
 				tracker_list, err := DecodeInfoTrackerListChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return InfoPacketChunk{}, err
+					return chunks.InfoPacketChunk{}, err
 				}
 				data.TrackerList = &tracker_list
 				offset += 4
@@ -65,7 +56,7 @@ func DecodeInfoPacketChunk(bytes []byte) (InfoPacketChunk, error) {
 		}
 	}
 
-	return InfoPacketChunk{
+	return chunks.InfoPacketChunk{
 			Chunk: chunk,
 			Data:  data,
 		},
