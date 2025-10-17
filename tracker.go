@@ -1,7 +1,7 @@
 package psn
 
 import (
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 	"github.com/jwetzell/psn-go/internal/encoders"
 )
 
@@ -138,12 +138,12 @@ func (t *Tracker) GetInfoChunk() []byte {
 	return encoders.EncodeInfoTrackerChunk(t.Id, encoders.EncodeInfoTrackerNameChunk(t.Name))
 }
 
-func (t *Tracker) UpdateInfo(infoTrackerChunk decoders.InfoTrackerChunk) {
+func (t *Tracker) UpdateInfo(infoTrackerChunk chunks.InfoTrackerChunk) {
 	t.Id = infoTrackerChunk.Chunk.Header.Id
 	t.Name = infoTrackerChunk.Data.TrackerName.Data.TrackerName
 }
 
-func (t *Tracker) UpdateData(dataTrackerChunk decoders.DataTrackerChunk) {
+func (t *Tracker) UpdateData(dataTrackerChunk chunks.DataTrackerChunk) {
 	if dataTrackerChunk.Data.Pos != nil {
 		t.SetPos(dataTrackerChunk.Data.Pos.Data.X, dataTrackerChunk.Data.Pos.Data.Y, dataTrackerChunk.Data.Pos.Data.Z)
 	}
@@ -173,13 +173,13 @@ func (t *Tracker) UpdateData(dataTrackerChunk decoders.DataTrackerChunk) {
 	}
 }
 
-func TrackerFromInfo(infoTrackerChunk decoders.InfoTrackerChunk) *Tracker {
+func TrackerFromInfo(infoTrackerChunk chunks.InfoTrackerChunk) *Tracker {
 	var tracker Tracker
 	tracker.UpdateInfo(infoTrackerChunk)
 	return &tracker
 }
 
-func TrackerFromData(dataTrackerChunk decoders.DataTrackerChunk) *Tracker {
+func TrackerFromData(dataTrackerChunk chunks.DataTrackerChunk) *Tracker {
 	var tracker Tracker
 	tracker.UpdateData(dataTrackerChunk)
 	return &tracker

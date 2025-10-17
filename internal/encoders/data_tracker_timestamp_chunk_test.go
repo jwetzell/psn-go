@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestDataTrackerTimestampChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.DataTrackerTimestampChunkData
+		data        chunks.DataTrackerTimestampChunkData
 	}{
 		{
 			description: "basic timestamp",
 			expected: []byte{
 				6, 0, 8, 0, 210, 2, 150, 73, 0, 0, 0, 0,
 			},
-			data: decoders.DataTrackerTimestampChunkData{
+			data: chunks.DataTrackerTimestampChunkData{
 				Timestamp: 1234567890,
 			},
 		},

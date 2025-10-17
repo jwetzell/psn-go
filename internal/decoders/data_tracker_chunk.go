@@ -3,31 +3,18 @@ package decoders
 import (
 	"encoding/binary"
 	"log/slog"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
-type DataTrackerChunkData struct {
-	Pos       *DataTrackerXYZChunk
-	Speed     *DataTrackerXYZChunk
-	Ori       *DataTrackerXYZChunk
-	Status    *DataTrackerStatusChunk
-	Accel     *DataTrackerXYZChunk
-	TrgtPos   *DataTrackerXYZChunk
-	Timestamp *DataTrackerTimestampChunk
-}
-
-type DataTrackerChunk struct {
-	Data  DataTrackerChunkData
-	Chunk Chunk
-}
-
-func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
+func DecodeDataTrackerChunk(bytes []byte) (chunks.DataTrackerChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 
 	if err != nil {
-		return DataTrackerChunk{}, err
+		return chunks.DataTrackerChunk{}, err
 	}
 
-	data := DataTrackerChunkData{}
+	data := chunks.DataTrackerChunkData{}
 
 	if chunk.Header.HasSubchunks && chunk.ChunkData != nil && chunk.Header.DataLen > 0 {
 		offset := 0
@@ -37,7 +24,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0000:
 				pos, err := DecodeDataTrackerXYZChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Pos = &pos
 				offset += 4
@@ -47,7 +34,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0001:
 				speed, err := DecodeDataTrackerXYZChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Speed = &speed
 				offset += 4
@@ -57,7 +44,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0002:
 				ori, err := DecodeDataTrackerXYZChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Ori = &ori
 				offset += 4
@@ -67,7 +54,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0003:
 				status, err := DecodeDataTrackerStatusChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Status = &status
 				offset += 4
@@ -77,7 +64,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0004:
 				accel, err := DecodeDataTrackerXYZChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Accel = &accel
 				offset += 4
@@ -87,7 +74,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0005:
 				trgtpos, err := DecodeDataTrackerXYZChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.TrgtPos = &trgtpos
 				offset += 4
@@ -97,7 +84,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 			case 0x0006:
 				timestamp, err := DecodeDataTrackerTimestampChunk(chunk.ChunkData[offset:])
 				if err != nil {
-					return DataTrackerChunk{}, err
+					return chunks.DataTrackerChunk{}, err
 				}
 				data.Timestamp = &timestamp
 				offset += 4
@@ -111,7 +98,7 @@ func DecodeDataTrackerChunk(bytes []byte) (DataTrackerChunk, error) {
 		}
 	}
 
-	return DataTrackerChunk{
+	return chunks.DataTrackerChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

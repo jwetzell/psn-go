@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestInfoSystemNameChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.InfoSystemNameChunkData
+		data        chunks.InfoSystemNameChunkData
 	}{
 		{
 			description: "InfoSystemNameChunk",
 			expected: []byte{
 				1, 0, 10, 0, 80, 83, 78, 32, 83, 101, 114, 118, 101, 114,
 			},
-			data: decoders.InfoSystemNameChunkData{
+			data: chunks.InfoSystemNameChunkData{
 				SystemName: "PSN Server",
 			},
 		},

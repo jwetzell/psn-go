@@ -1,24 +1,15 @@
 package decoders
 
-import "encoding/binary"
+import (
+	"encoding/binary"
 
-type PacketHeaderChunkData struct {
-	PacketTimestamp  uint64
-	VersionHigh      uint8
-	VersionLow       uint8
-	FrameId          uint8
-	FramePacketCount uint8
-}
+	"github.com/jwetzell/psn-go/internal/chunks"
+)
 
-type PacketHeaderChunk struct {
-	Chunk Chunk
-	Data  PacketHeaderChunkData
-}
-
-func DecodePacketHeaderChunk(bytes []byte) (PacketHeaderChunk, error) {
+func DecodePacketHeaderChunk(bytes []byte) (chunks.PacketHeaderChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 	if err != nil {
-		return PacketHeaderChunk{}, err
+		return chunks.PacketHeaderChunk{}, err
 	}
 
 	packet_timestamp := binary.LittleEndian.Uint64(chunk.ChunkData[0:8])
@@ -27,7 +18,7 @@ func DecodePacketHeaderChunk(bytes []byte) (PacketHeaderChunk, error) {
 	frame_id := chunk.ChunkData[10]
 	frame_packet_count := chunk.ChunkData[11]
 
-	data := PacketHeaderChunkData{
+	data := chunks.PacketHeaderChunkData{
 		PacketTimestamp:  packet_timestamp,
 		VersionHigh:      version_high,
 		VersionLow:       version_low,
@@ -35,7 +26,7 @@ func DecodePacketHeaderChunk(bytes []byte) (PacketHeaderChunk, error) {
 		FramePacketCount: frame_packet_count,
 	}
 
-	return PacketHeaderChunk{
+	return chunks.PacketHeaderChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

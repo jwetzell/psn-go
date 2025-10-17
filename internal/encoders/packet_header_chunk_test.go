@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestPacketHeaderChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.PacketHeaderChunkData
+		data        chunks.PacketHeaderChunkData
 	}{
 		{
 			description: "PacketHeaderChunk",
 			expected: []byte{
 				0, 0, 12, 0, 210, 2, 150, 73, 0, 0, 0, 0, 2, 3, 1, 123,
 			},
-			data: decoders.PacketHeaderChunkData{
+			data: chunks.PacketHeaderChunkData{
 				PacketTimestamp:  1234567890,
 				VersionHigh:      2,
 				VersionLow:       3,

@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodDataTrackerXYZChunk(t *testing.T) {
@@ -11,17 +13,17 @@ func TestGoodDataTrackerXYZChunk(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    DataTrackerXYZChunk
+		expected    chunks.DataTrackerXYZChunk
 	}{
 		{
 			description: "DataTrackerPosChunk",
 			bytes:       []byte{0, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-			expected: DataTrackerXYZChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerXYZChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-					Header:    ChunkHeader{DataLen: 12, Id: 0, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 0, HasSubchunks: false},
 				},
-				Data: DataTrackerXYZChunkData{
+				Data: chunks.DataTrackerXYZChunkData{
 					X: 1.0,
 					Y: 2.0,
 					Z: 3.0,
@@ -31,12 +33,12 @@ func TestGoodDataTrackerXYZChunk(t *testing.T) {
 		{
 			description: "DataTrackerSpeedChunk",
 			bytes:       []byte{1, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-			expected: DataTrackerXYZChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerXYZChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-					Header:    ChunkHeader{DataLen: 12, Id: 1, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 1, HasSubchunks: false},
 				},
-				Data: DataTrackerXYZChunkData{
+				Data: chunks.DataTrackerXYZChunkData{
 					X: 1.0,
 					Y: 2.0,
 					Z: 3.0,
@@ -46,12 +48,12 @@ func TestGoodDataTrackerXYZChunk(t *testing.T) {
 		{
 			description: "DataTrackerOriChunk",
 			bytes:       []byte{2, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-			expected: DataTrackerXYZChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerXYZChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-					Header:    ChunkHeader{DataLen: 12, Id: 2, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 2, HasSubchunks: false},
 				},
-				Data: DataTrackerXYZChunkData{
+				Data: chunks.DataTrackerXYZChunkData{
 					X: 1.0,
 					Y: 2.0,
 					Z: 3.0,
@@ -61,12 +63,12 @@ func TestGoodDataTrackerXYZChunk(t *testing.T) {
 		{
 			description: "DataTrackerAccelChunk",
 			bytes:       []byte{4, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-			expected: DataTrackerXYZChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerXYZChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-					Header:    ChunkHeader{DataLen: 12, Id: 4, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 4, HasSubchunks: false},
 				},
-				Data: DataTrackerXYZChunkData{
+				Data: chunks.DataTrackerXYZChunkData{
 					X: 1.0,
 					Y: 2.0,
 					Z: 3.0,
@@ -76,12 +78,12 @@ func TestGoodDataTrackerXYZChunk(t *testing.T) {
 		{
 			description: "DataTrackerTrgtPosChunk",
 			bytes:       []byte{5, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-			expected: DataTrackerXYZChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerXYZChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64},
-					Header:    ChunkHeader{DataLen: 12, Id: 5, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 12, Id: 5, HasSubchunks: false},
 				},
-				Data: DataTrackerXYZChunkData{
+				Data: chunks.DataTrackerXYZChunkData{
 					X: 1.0,
 					Y: 2.0,
 					Z: 3.0,

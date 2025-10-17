@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"reflect"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodDataTrackerStatusChunk(t *testing.T) {
@@ -11,17 +13,17 @@ func TestGoodDataTrackerStatusChunk(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    DataTrackerStatusChunk
+		expected    chunks.DataTrackerStatusChunk
 	}{
 		{
 			description: "DataTrackerStatusChunk",
 			bytes:       []byte{3, 0, 4, 0, 0, 0, 128, 63},
-			expected: DataTrackerStatusChunk{
-				Chunk: Chunk{
+			expected: chunks.DataTrackerStatusChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 128, 63},
-					Header:    ChunkHeader{DataLen: 4, Id: 3, HasSubchunks: false},
+					Header:    chunks.ChunkHeader{DataLen: 4, Id: 3, HasSubchunks: false},
 				},
-				Data: DataTrackerStatusChunkData{
+				Data: chunks.DataTrackerStatusChunkData{
 					Validity: 1.0,
 				},
 			},

@@ -4,35 +4,28 @@ import (
 	"encoding/binary"
 	"errors"
 	"math"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
-type DataTrackerStatusChunkData struct {
-	Validity float32
-}
-
-type DataTrackerStatusChunk struct {
-	Chunk Chunk
-	Data  DataTrackerStatusChunkData
-}
-
-func DecodeDataTrackerStatusChunk(bytes []byte) (DataTrackerStatusChunk, error) {
+func DecodeDataTrackerStatusChunk(bytes []byte) (chunks.DataTrackerStatusChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 
 	if err != nil {
-		return DataTrackerStatusChunk{}, err
+		return chunks.DataTrackerStatusChunk{}, err
 	}
 
 	if len(chunk.ChunkData) < 4 {
-		return DataTrackerStatusChunk{}, errors.New("DATA_TRACKER_STATUS chunk must be at least 4 bytes")
+		return chunks.DataTrackerStatusChunk{}, errors.New("DATA_TRACKER_STATUS chunk must be at least 4 bytes")
 	}
 
 	statusBits := binary.LittleEndian.Uint32(chunk.ChunkData[0:4])
 
-	data := DataTrackerStatusChunkData{
+	data := chunks.DataTrackerStatusChunkData{
 		Validity: math.Float32frombits(statusBits),
 	}
 
-	return DataTrackerStatusChunk{
+	return chunks.DataTrackerStatusChunk{
 			Chunk: chunk,
 			Data:  data,
 		},

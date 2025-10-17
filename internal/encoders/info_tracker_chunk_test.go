@@ -5,32 +5,32 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestInfoTrackerChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		chunk       decoders.InfoTrackerChunk
+		chunk       chunks.InfoTrackerChunk
 	}{
 		{
 			description: "InfoTrackerChunk",
 			expected: []byte{
 				1, 0, 13, 128, 0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49,
 			},
-			chunk: decoders.InfoTrackerChunk{
-				Chunk: decoders.Chunk{
+			chunk: chunks.InfoTrackerChunk{
+				Chunk: chunks.Chunk{
 					ChunkData: []byte{0, 0, 9, 0, 84, 114, 97, 99, 107, 101, 114, 32, 49},
-					Header:    decoders.ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
+					Header:    chunks.ChunkHeader{DataLen: 13, Id: 1, HasSubchunks: true},
 				},
-				Data: decoders.InfoTrackerChunkData{
-					TrackerName: &decoders.InfoTrackerNameChunk{
-						Chunk: decoders.Chunk{
+				Data: chunks.InfoTrackerChunkData{
+					TrackerName: &chunks.InfoTrackerNameChunk{
+						Chunk: chunks.Chunk{
 							ChunkData: []byte{84, 114, 97, 99, 107, 101, 114, 32, 49},
-							Header:    decoders.ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
+							Header:    chunks.ChunkHeader{DataLen: 9, Id: 0, HasSubchunks: false},
 						},
-						Data: decoders.InfoTrackerNameChunkData{
+						Data: chunks.InfoTrackerNameChunkData{
 							TrackerName: "Tracker 1",
 						},
 					},

@@ -1,26 +1,19 @@
 package decoders
 
-type InfoSystemNameChunkData struct {
-	SystemName string
-}
+import "github.com/jwetzell/psn-go/internal/chunks"
 
-type InfoSystemNameChunk struct {
-	Data  InfoSystemNameChunkData
-	Chunk Chunk
-}
-
-func DecodeInfoSystemNameChunk(bytes []byte) (InfoSystemNameChunk, error) {
+func DecodeInfoSystemNameChunk(bytes []byte) (chunks.InfoSystemNameChunk, error) {
 	chunk, err := DecodeChunk(bytes)
 	if err != nil {
-		return InfoSystemNameChunk{}, err
+		return chunks.InfoSystemNameChunk{}, err
 	}
-	data := InfoSystemNameChunkData{}
+	data := chunks.InfoSystemNameChunkData{}
 
 	if chunk.Header.DataLen > 0 {
 		data.SystemName = string(chunk.ChunkData[0:chunk.Header.DataLen])
 	}
 
-	return InfoSystemNameChunk{
+	return chunks.InfoSystemNameChunk{
 		Chunk: chunk,
 		Data:  data,
 	}, nil

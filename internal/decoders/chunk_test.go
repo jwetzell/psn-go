@@ -5,13 +5,15 @@ import (
 	"reflect"
 	"strings"
 	"testing"
+
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestGoodChunkDecoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		bytes       []byte
-		expected    Chunk
+		expected    chunks.Chunk
 	}{
 		{
 			description: "info packet",
@@ -20,8 +22,8 @@ func TestGoodChunkDecoding(t *testing.T) {
 				0x01, 0x01, 0x00, 0x0b, 0x00, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x20, 0x4e, 0x61, 0x6d, 0x65, 0x02, 0x00, 0x11,
 				0x80, 0x01, 0x00, 0x0d, 0x80, 0x00, 0x00, 0x09, 0x00, 0x54, 0x72, 0x61, 0x63, 0x6b, 0x65, 0x72, 0x20, 0x31,
 			},
-			expected: Chunk{
-				Header: ChunkHeader{
+			expected: chunks.Chunk{
+				Header: chunks.ChunkHeader{
 					Id:           uint16(26454),
 					DataLen:      uint16(52),
 					HasSubchunks: true,
@@ -40,8 +42,8 @@ func TestGoodChunkDecoding(t *testing.T) {
 				0x01, 0x01, 0x00, 0x14, 0x80, 0x01, 0x00, 0x10, 0x80, 0x00, 0x00, 0x0c, 0x00, 0x00, 0x00, 0x80, 0x3f, 0x00, 0x00,
 				0x80, 0x3f, 0x00, 0x00, 0x80, 0x3f,
 			},
-			expected: Chunk{
-				Header: ChunkHeader{
+			expected: chunks.Chunk{
+				Header: chunks.ChunkHeader{
 					Id:           uint16(26453),
 					DataLen:      uint16(40),
 					HasSubchunks: true,

@@ -5,21 +5,21 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/jwetzell/psn-go/internal/decoders"
+	"github.com/jwetzell/psn-go/internal/chunks"
 )
 
 func TestDataTrackerOriChunkEncoding(t *testing.T) {
 	testCases := []struct {
 		description string
 		expected    []byte
-		data        decoders.DataTrackerXYZChunkData
+		data        chunks.DataTrackerXYZChunkData
 	}{
 		{
 			description: "basic orientation",
 			expected: []byte{
 				2, 0, 12, 0, 0, 0, 128, 63, 0, 0, 0, 64, 0, 0, 64, 64,
 			},
-			data: decoders.DataTrackerXYZChunkData{
+			data: chunks.DataTrackerXYZChunkData{
 				X: 1,
 				Y: 2,
 				Z: 3,
