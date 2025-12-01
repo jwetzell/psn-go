@@ -81,6 +81,55 @@ func TestGoodInfoPacketChunkDecoding(t *testing.T) {
 				},
 			},
 		},
+		{
+			description: "empty InfoPacketChunk",
+			bytes: []byte{
+				0x56, 0x67, 0x22, 0x80, 0x00, 0x00, 0x0C, 0x00, 0x3D, 0x2C, 0x91, 0xDB, 0x9A, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00,
+				0x01, 0x01, 0x00, 0x0A, 0x00, 0x50, 0x53, 0x4E, 0x20, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x02, 0x00, 0x00, 0x80,
+			},
+			expected: chunks.InfoPacketChunk{
+				Chunk: chunks.Chunk{
+					ChunkData: []byte{
+						0x00, 0x00, 0x0C, 0x00, 0x3D, 0x2C, 0x91, 0xDB, 0x9A, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00,
+						0x01, 0x01, 0x00, 0x0A, 0x00, 0x50, 0x53, 0x4E, 0x20, 0x53, 0x65, 0x72, 0x76, 0x65, 0x72, 0x02, 0x00, 0x00, 0x80,
+					},
+					Header: chunks.ChunkHeader{DataLen: 34, Id: 26454, HasSubchunks: true},
+				},
+				Data: chunks.InfoPacketChunkData{
+					PacketHeader: &chunks.PacketHeaderChunk{
+						Chunk: chunks.Chunk{
+							ChunkData: []byte{0x3D, 0x2C, 0x91, 0xDB, 0x9A, 0x01, 0x00, 0x00, 0x02, 0x00, 0x00, 0x01},
+							Header:    chunks.ChunkHeader{DataLen: 12, Id: 0, HasSubchunks: false},
+						},
+						Data: chunks.PacketHeaderChunkData{
+							PacketTimestamp:  1764620315709,
+							VersionHigh:      2,
+							VersionLow:       0,
+							FrameId:          0,
+							FramePacketCount: 1,
+						},
+					},
+					SystemName: &chunks.InfoSystemNameChunk{
+						Chunk: chunks.Chunk{
+							ChunkData: []byte{80, 83, 78, 32, 83, 101, 114, 118, 101, 114},
+							Header:    chunks.ChunkHeader{DataLen: 10, Id: 1, HasSubchunks: false},
+						},
+						Data: chunks.InfoSystemNameChunkData{
+							SystemName: "PSN Server",
+						},
+					},
+					TrackerList: &chunks.InfoTrackerListChunk{
+						Chunk: chunks.Chunk{
+							ChunkData: []byte{},
+							Header:    chunks.ChunkHeader{DataLen: 0, Id: 2, HasSubchunks: true},
+						},
+						Data: chunks.InfoTrackerListChunkData{
+							Trackers: []chunks.InfoTrackerChunk{},
+						},
+					},
+				},
+			},
+		},
 	}
 
 	for _, testCase := range testCases {
@@ -93,9 +142,11 @@ func TestGoodInfoPacketChunkDecoding(t *testing.T) {
 		}
 
 		if !reflect.DeepEqual(actual, testCase.expected) {
+			fmt.Printf("%+v\n", actual.Data.TrackerList)
+			fmt.Printf("%+v\n", testCase.expected.Data.TrackerList)
 			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
-			fmt.Printf("expected: %+v\n", testCase.expected)
-			fmt.Printf("actual: %+v\n", actual)
+			// fmt.Printf("expected: %+v\n", testCase.expected)
+			// fmt.Printf("actual: %+v\n", actual)
 		}
 	}
 }

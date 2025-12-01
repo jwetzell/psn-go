@@ -18,7 +18,7 @@ func DecodeChunk(bytes []byte) (chunks.Chunk, error) {
 
 	data_len := lengthAndFlag
 
-	has_subchunks := lengthAndFlag > 32768
+	has_subchunks := lengthAndFlag >= 32768
 
 	if has_subchunks {
 		data_len = data_len - 32768
