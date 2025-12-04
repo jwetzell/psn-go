@@ -7,11 +7,11 @@ import (
 	"github.com/jwetzell/psn-go"
 )
 
-func getNTrackers(n int) []psn.Tracker {
-	trackers := []psn.Tracker{}
+func getNTrackers(n int) []*psn.Tracker {
+	trackers := []*psn.Tracker{}
 
 	for index := 0; index < n; index++ {
-		tracker := psn.Tracker{Id: uint16(index), Name: "Tracker"}
+		tracker := &psn.Tracker{Id: uint16(index), Name: "Tracker"}
 		tracker.SetPos(0, 0, 0)
 		tracker.SetSpeed(0, 0, 0)
 		tracker.SetOri(0, 0, 0)

@@ -13,14 +13,14 @@ func main() {
 		VersionLow:  3,
 	}
 
-	tracker := psn.Tracker{
+	tracker := &psn.Tracker{
 		Id:   1,
 		Name: "Tracker 1",
 	}
 
 	tracker.SetPos(1.0, 1.0, 1.0)
 
-	trackers := []psn.Tracker{
+	trackers := []*psn.Tracker{
 		tracker,
 	}
 
