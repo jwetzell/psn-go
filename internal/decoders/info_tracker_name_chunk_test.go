@@ -1,7 +1,6 @@
 package decoders
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -33,17 +32,16 @@ func TestGoodInfoTrackerNameChunkDecoding(t *testing.T) {
 
 	for _, testCase := range testCases {
 
-		actual, err := DecodeInfoTrackerNameChunk(testCase.bytes)
+		t.Run(testCase.description, func(t *testing.T) {
+			actual, err := DecodeInfoTrackerNameChunk(testCase.bytes)
 
-		if err != nil {
-			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
-			fmt.Println(err)
-		}
+			if err != nil {
+				t.Errorf("failed to decode chunk properly, error: %v", err)
+			}
 
-		if !reflect.DeepEqual(actual, testCase.expected) {
-			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
-			fmt.Printf("expected: %+v\n", testCase.expected)
-			fmt.Printf("actual: %+v\n", actual)
-		}
+			if !reflect.DeepEqual(actual, testCase.expected) {
+				t.Errorf("failed to decode chunk properly, expected: %+v, actual: %+v", testCase.expected, actual)
+			}
+		})
 	}
 }

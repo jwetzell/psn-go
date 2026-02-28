@@ -1,7 +1,6 @@
 package encoders
 
 import (
-	"fmt"
 	"reflect"
 	"testing"
 
@@ -28,13 +27,12 @@ func TestDataTrackerAccelChunkEncoding(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
+		t.Run(testCase.description, func(t *testing.T) {
+			actual := EncodeDataTrackerAccelChunk(testCase.data.X, testCase.data.Y, testCase.data.Z)
 
-		actual := EncodeDataTrackerAccelChunk(testCase.data.X, testCase.data.Y, testCase.data.Z)
-
-		if !reflect.DeepEqual(actual, testCase.expected) {
-			t.Errorf("Test '%s' failed to encode chunk properly", testCase.description)
-			fmt.Printf("expected: %v\n", testCase.expected)
-			fmt.Printf("actual: %v\n", actual)
-		}
+			if !reflect.DeepEqual(actual, testCase.expected) {
+				t.Errorf("failed to encode chunk properly, expected: %v, actual: %v\n", testCase.expected, actual)
+			}
+		})
 	}
 }

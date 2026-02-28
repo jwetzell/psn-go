@@ -1,7 +1,6 @@
 package decoders
 
 import (
-	"fmt"
 	"reflect"
 	"strings"
 	"testing"
@@ -58,19 +57,17 @@ func TestGoodChunkDecoding(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
+		t.Run(testCase.description, func(t *testing.T) {
+			actual, err := DecodeChunk(testCase.bytes)
 
-		actual, err := DecodeChunk(testCase.bytes)
+			if err != nil {
+				t.Errorf("failed to decode chunk properly, error: %v", err)
+			}
 
-		if err != nil {
-			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
-			fmt.Println(err)
-		}
-
-		if !reflect.DeepEqual(actual, testCase.expected) {
-			t.Errorf("Test '%s' failed to decode chunk properly", testCase.description)
-			fmt.Printf("expected: %v\n", testCase.expected)
-			fmt.Printf("actual: %v\n", actual)
-		}
+			if !reflect.DeepEqual(actual, testCase.expected) {
+				t.Errorf("failed to decode chunk properly, expected: %+v, actual: %+v", testCase.expected, actual)
+			}
+		})
 	}
 }
 
@@ -88,18 +85,16 @@ func TestBadChunkDecoding(t *testing.T) {
 	}
 
 	for _, testCase := range testCases {
+		t.Run(testCase.description, func(t *testing.T) {
+			_, err := DecodeChunk(testCase.bytes)
 
-		_, err := DecodeChunk(testCase.bytes)
+			if err == nil {
+				t.Error("should have failed fail to decode chunk properly")
+			}
 
-		if err == nil {
-			t.Errorf("Test '%s' should have failed fail to decode chunk properly", testCase.description)
-		}
-
-		if !strings.Contains(err.Error(), testCase.errorShouldContain) {
-			t.Errorf("Test '%s' did not return the correct error", testCase.description)
-			fmt.Printf("expected: %v\n", testCase.errorShouldContain)
-			fmt.Printf("actual: %v\n", err.Error())
-		}
-
+			if !strings.Contains(err.Error(), testCase.errorShouldContain) {
+				t.Errorf("did not return the correct error expected: %s, got: %s", testCase.errorShouldContain, err.Error())
+			}
+		})
 	}
 }
