@@ -10,7 +10,7 @@ import (
 func getNTrackers(n int) []*psn.Tracker {
 	trackers := []*psn.Tracker{}
 
-	for index := 0; index < n; index++ {
+	for index := range n {
 		tracker := &psn.Tracker{Id: uint16(index), Name: "Tracker"}
 		tracker.SetPos(0, 0, 0)
 		tracker.SetSpeed(0, 0, 0)
@@ -61,14 +61,14 @@ func benchmark(trackerCount int, iterations int, encoder psn.Encoder, decoder ps
 
 	latestEncodedPackets := [][]byte{}
 
-	for index := 0; index < iterations; index++ {
+	for range iterations {
 		latestEncodedPackets = encoder.GetDataPackets(uint64(timestamp), trackers)
 	}
 	benchmarkResults.data.encode = float64(time.Now().UnixMicro()-dataEncoderStart) / 1000.0
 
 	_ = latestEncodedPackets
 	dataDecodedStart := time.Now().UnixMicro()
-	for index := 0; index < iterations; index++ {
+	for range iterations {
 		for _, packet := range latestEncodedPackets {
 			decoder.Decode(packet)
 		}
@@ -77,13 +77,13 @@ func benchmark(trackerCount int, iterations int, encoder psn.Encoder, decoder ps
 
 	// INFO
 	infoEncoderStart := time.Now().UnixMicro()
-	for index := 0; index < iterations; index++ {
+	for range iterations {
 		latestEncodedPackets = encoder.GetInfoPackets(uint64(timestamp), trackers)
 	}
 	benchmarkResults.info.encode = float64(time.Now().UnixMicro()-infoEncoderStart) / 1000.0
 
 	infoDecodeStart := time.Now().UnixMicro()
-	for index := 0; index < iterations; index++ {
+	for range iterations {
 		for _, packet := range latestEncodedPackets {
 			decoder.Decode(packet)
 		}
