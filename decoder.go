@@ -6,12 +6,10 @@ import (
 )
 
 type Decoder struct {
-	lastInfoPacketHeader *chunks.PacketHeaderChunk
-	lastDataPacketHeader *chunks.PacketHeaderChunk
-	infoPacketFrames     map[uint8][]chunks.InfoPacketChunk
-	dataPacketFrames     map[uint8][]chunks.DataPacketChunk
-	Trackers             map[uint16]*Tracker
-	SystemName           string
+	infoPacketFrames map[uint8][]chunks.InfoPacketChunk
+	dataPacketFrames map[uint8][]chunks.DataPacketChunk
+	Trackers         map[uint16]*Tracker
+	SystemName       string
 }
 
 func NewDecoder() *Decoder {
@@ -58,7 +56,8 @@ func (d *Decoder) Decode(bytes []byte) error {
 		return err
 	}
 
-	if chunk.Header.Id == 0x6756 {
+	switch chunk.Header.Id {
+	case 0x6756:
 		infoPacket, err := decoders.DecodeInfoPacketChunk(bytes)
 		if err != nil {
 			return err
@@ -76,7 +75,7 @@ func (d *Decoder) Decode(bytes []byte) error {
 			d.updateInfo(d.infoPacketFrames[currentInfoPacketHeader.Data.FrameId])
 			delete(d.infoPacketFrames, currentInfoPacketHeader.Data.FrameId)
 		}
-	} else if chunk.Header.Id == 0x6755 {
+	case 0x6755:
 		dataPacket, err := decoders.DecodeDataPacketChunk(bytes)
 		if err != nil {
 			return err

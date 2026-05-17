@@ -70,7 +70,10 @@ func benchmark(trackerCount int, iterations int, encoder psn.Encoder, decoder ps
 	dataDecodedStart := time.Now().UnixMicro()
 	for range iterations {
 		for _, packet := range latestEncodedPackets {
-			decoder.Decode(packet)
+			err := decoder.Decode(packet)
+			if err != nil {
+				fmt.Printf("failed to decode packet, error: %v\n", err)
+			}
 		}
 	}
 	benchmarkResults.data.decode = float64(time.Now().UnixMicro()-dataDecodedStart) / 1000.0
@@ -85,7 +88,10 @@ func benchmark(trackerCount int, iterations int, encoder psn.Encoder, decoder ps
 	infoDecodeStart := time.Now().UnixMicro()
 	for range iterations {
 		for _, packet := range latestEncodedPackets {
-			decoder.Decode(packet)
+			err := decoder.Decode(packet)
+			if err != nil {
+				fmt.Printf("failed to decode packet, error: %v\n", err)
+			}
 		}
 	}
 	benchmarkResults.info.decode = float64(time.Now().UnixMicro()-infoDecodeStart) / 1000.0

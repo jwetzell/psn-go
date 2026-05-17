@@ -72,13 +72,19 @@ func main() {
 			slog.Info("Sending Info Packets")
 			infoPackets := encoder.GetInfoPackets(uint64(timestamp), trackers)
 			for _, infoPacket := range infoPackets {
-				client.Write(infoPacket)
+				_, err := client.Write(infoPacket)
+				if err != nil {
+					slog.Error("failed to send info packet", "error", err)
+				}
 			}
 		case <-dataTicker.C:
 			slog.Info("Sending Data Packets")
 			dataPackets := encoder.GetDataPackets(uint64(timestamp), trackers)
-			for _, DataPacket := range dataPackets {
-				client.Write(DataPacket)
+			for _, dataPacket := range dataPackets {
+				_, err := client.Write(dataPacket)
+				if err != nil {
+					slog.Error("failed to send data packet", "error", err)
+				}
 			}
 			timestamp += 1
 		}
