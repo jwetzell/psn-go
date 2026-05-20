@@ -30,6 +30,10 @@ func DecodeChunk(bytes []byte) (chunks.Chunk, error) {
 		HasSubchunks: has_subchunks,
 	}
 
+	if len(bytes) < 4+int(header.DataLen) {
+		return chunks.Chunk{}, errors.New("chunk data length is greater than the number of bytes")
+	}
+
 	chunk_data := bytes[4 : 4+header.DataLen]
 
 	return chunks.Chunk{
