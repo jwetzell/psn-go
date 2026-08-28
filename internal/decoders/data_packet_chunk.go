@@ -2,7 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
-	"log/slog"
+	"fmt"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
 )
@@ -43,7 +43,7 @@ func DecodeDataPacketChunk(bytes []byte) (chunks.DataPacketChunk, error) {
 				}
 
 			default:
-				slog.Error("unhandled info packet id", "id", id)
+				return chunks.DataPacketChunk{}, fmt.Errorf("unknown data packet ID: 0x%04x", id)
 			}
 		}
 	}

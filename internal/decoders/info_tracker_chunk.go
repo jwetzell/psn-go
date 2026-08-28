@@ -2,7 +2,7 @@ package decoders
 
 import (
 	"encoding/binary"
-	"log/slog"
+	"fmt"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
 )
@@ -30,7 +30,7 @@ func DecodeInfoTrackerChunk(bytes []byte) (chunks.InfoTrackerChunk, error) {
 					offset = offset + int(tracker_name.Chunk.Header.DataLen)
 				}
 			default:
-				slog.Error("unhandled info tracker chunk id", "id", id)
+				return chunks.InfoTrackerChunk{}, fmt.Errorf("unknown info tracker chunk ID: 0x%04x", id)
 			}
 		}
 	}
