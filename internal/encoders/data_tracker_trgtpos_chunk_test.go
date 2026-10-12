@@ -1,10 +1,10 @@
 package encoders
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestDataTrackerTrgtPosChunkEncoding(t *testing.T) {
@@ -31,9 +31,7 @@ func TestDataTrackerTrgtPosChunkEncoding(t *testing.T) {
 
 			actual := EncodeDataTrackerTrgtPosChunk(testCase.data.X, testCase.data.Y, testCase.data.Z)
 
-			if !reflect.DeepEqual(actual, testCase.expected) {
-				t.Errorf("failed to encode chunk properly, expected: %v, actual: %v\n", testCase.expected, actual)
-			}
+			require.Equal(t, testCase.expected, actual)
 		})
 	}
 }

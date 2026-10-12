@@ -1,11 +1,10 @@
 package decoders
 
 import (
-	"reflect"
-	"strings"
 	"testing"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGoodChunkDecoding(t *testing.T) {
@@ -60,13 +59,8 @@ func TestGoodChunkDecoding(t *testing.T) {
 		t.Run(testCase.description, func(t *testing.T) {
 			actual, err := DecodeChunk(testCase.bytes)
 
-			if err != nil {
-				t.Errorf("failed to decode chunk properly, error: %v", err)
-			}
-
-			if !reflect.DeepEqual(actual, testCase.expected) {
-				t.Errorf("failed to decode chunk properly, expected: %+v, actual: %+v", testCase.expected, actual)
-			}
+			require.NoError(t, err)
+			require.Equal(t, testCase.expected, actual)
 		})
 	}
 }
@@ -88,13 +82,8 @@ func TestBadChunkDecoding(t *testing.T) {
 		t.Run(testCase.description, func(t *testing.T) {
 			_, err := DecodeChunk(testCase.bytes)
 
-			if err == nil {
-				t.Error("should have failed fail to decode chunk properly")
-			}
-
-			if !strings.Contains(err.Error(), testCase.errorShouldContain) {
-				t.Errorf("did not return the correct error expected: %s, got: %s", testCase.errorShouldContain, err.Error())
-			}
+			require.Error(t, err)
+			require.Contains(t, err.Error(), testCase.errorShouldContain)
 		})
 	}
 }
@@ -107,9 +96,7 @@ func BenchmarkChunkDecoding(b *testing.B) {
 	}
 	for b.Loop() {
 		_, err := DecodeChunk(data)
-		if err != nil {
-			b.Errorf("failed to decode chunk properly, error: %v", err)
-		}
+		require.Error(b, err)
 	}
 }
 
