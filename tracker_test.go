@@ -4,19 +4,18 @@ import (
 	"testing"
 
 	"github.com/jwetzell/psn-go"
+	"github.com/stretchr/testify/require"
 )
 
 func TestTrackerSetPosNilPos(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetPos(1.0, 2.0, 3.0)
 
-	if tracker.Pos == nil {
-		t.Errorf("Expected Pos to be initialized, but it is nil")
-	} else {
-		if tracker.Pos.X != 1.0 || tracker.Pos.Y != 2.0 || tracker.Pos.Z != 3.0 {
-			t.Errorf("Expected Pos to be (1.0, 2.0, 3.0), but got (%f, %f, %f)", tracker.Pos.X, tracker.Pos.Y, tracker.Pos.Z)
-		}
-	}
+	require.NotNil(t, tracker.Pos)
+
+	require.Equal(t, float32(1.0), tracker.Pos.X)
+	require.Equal(t, float32(2.0), tracker.Pos.Y)
+	require.Equal(t, float32(3.0), tracker.Pos.Z)
 }
 
 func TestTrackerSetPosNonNilPos(t *testing.T) {
@@ -25,26 +24,20 @@ func TestTrackerSetPosNonNilPos(t *testing.T) {
 	}
 	tracker.SetPos(4.0, 5.0, 6.0)
 
-	if tracker.Pos == nil {
-		t.Errorf("Expected Pos to be initialized, but it is nil")
-	} else {
-		if tracker.Pos.X != 4.0 || tracker.Pos.Y != 5.0 || tracker.Pos.Z != 6.0 {
-			t.Errorf("Expected Pos to be (4.0, 5.0, 6.0), but got (%f, %f, %f)", tracker.Pos.X, tracker.Pos.Y, tracker.Pos.Z)
-		}
-	}
+	require.NotNil(t, tracker.Pos)
+	require.Equal(t, float32(4.0), tracker.Pos.X)
+	require.Equal(t, float32(5.0), tracker.Pos.Y)
+	require.Equal(t, float32(6.0), tracker.Pos.Z)
 }
 
 func TestTrackerSetSpeedNilSpeed(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetSpeed(1.0, 2.0, 3.0)
 
-	if tracker.Speed == nil {
-		t.Errorf("Expected Speed to be initialized, but it is nil")
-	} else {
-		if tracker.Speed.X != 1.0 || tracker.Speed.Y != 2.0 || tracker.Speed.Z != 3.0 {
-			t.Errorf("Expected Speed to be (1.0, 2.0, 3.0), but got (%f, %f, %f)", tracker.Speed.X, tracker.Speed.Y, tracker.Speed.Z)
-		}
-	}
+	require.NotNil(t, tracker.Speed)
+	require.Equal(t, float32(1.0), tracker.Speed.X)
+	require.Equal(t, float32(2.0), tracker.Speed.Y)
+	require.Equal(t, float32(3.0), tracker.Speed.Z)
 }
 
 func TestTrackerSetSpeedNonNilSpeed(t *testing.T) {
@@ -53,26 +46,20 @@ func TestTrackerSetSpeedNonNilSpeed(t *testing.T) {
 	}
 	tracker.SetSpeed(4.0, 5.0, 6.0)
 
-	if tracker.Speed == nil {
-		t.Errorf("Expected Speed to be initialized, but it is nil")
-	} else {
-		if tracker.Speed.X != 4.0 || tracker.Speed.Y != 5.0 || tracker.Speed.Z != 6.0 {
-			t.Errorf("Expected Speed to be (4.0, 5.0, 6.0), but got (%f, %f, %f)", tracker.Speed.X, tracker.Speed.Y, tracker.Speed.Z)
-		}
-	}
+	require.NotNil(t, tracker.Speed)
+	require.Equal(t, float32(4.0), tracker.Speed.X)
+	require.Equal(t, float32(5.0), tracker.Speed.Y)
+	require.Equal(t, float32(6.0), tracker.Speed.Z)
 }
 
 func TestTrackerSetOriNilOri(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetOri(1.0, 2.0, 3.0)
 
-	if tracker.Ori == nil {
-		t.Errorf("Expected Ori to be initialized, but it is nil")
-	} else {
-		if tracker.Ori.X != 1.0 || tracker.Ori.Y != 2.0 || tracker.Ori.Z != 3.0 {
-			t.Errorf("Expected Ori to be (1.0, 2.0, 3.0), but got (%f, %f, %f)", tracker.Ori.X, tracker.Ori.Y, tracker.Ori.Z)
-		}
-	}
+	require.NotNil(t, tracker.Ori)
+	require.Equal(t, float32(1.0), tracker.Ori.X)
+	require.Equal(t, float32(2.0), tracker.Ori.Y)
+	require.Equal(t, float32(3.0), tracker.Ori.Z)
 }
 
 func TestTrackerSetOriNonNilOri(t *testing.T) {
@@ -81,26 +68,18 @@ func TestTrackerSetOriNonNilOri(t *testing.T) {
 	}
 	tracker.SetOri(4.0, 5.0, 6.0)
 
-	if tracker.Ori == nil {
-		t.Errorf("Expected Ori to be initialized, but it is nil")
-	} else {
-		if tracker.Ori.X != 4.0 || tracker.Ori.Y != 5.0 || tracker.Ori.Z != 6.0 {
-			t.Errorf("Expected Ori to be (4.0, 5.0, 6.0), but got (%f, %f, %f)", tracker.Ori.X, tracker.Ori.Y, tracker.Ori.Z)
-		}
-	}
+	require.NotNil(t, tracker.Ori)
+	require.Equal(t, float32(4.0), tracker.Ori.X)
+	require.Equal(t, float32(5.0), tracker.Ori.Y)
+	require.Equal(t, float32(6.0), tracker.Ori.Z)
 }
 
 func TestTrackerSetStatusNilStatus(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetStatus(0.75)
 
-	if tracker.Validity == nil {
-		t.Errorf("Expected Validity to be initialized, but it is nil")
-	} else {
-		if *tracker.Validity != 0.75 {
-			t.Errorf("Expected Validity to be 0.75, but got %f", *tracker.Validity)
-		}
-	}
+	require.NotNil(t, tracker.Validity)
+	require.Equal(t, float32(0.75), *tracker.Validity)
 }
 
 func TestTrackerSetStatusNonNilStatus(t *testing.T) {
@@ -110,26 +89,18 @@ func TestTrackerSetStatusNonNilStatus(t *testing.T) {
 	*tracker.Validity = 0.5
 	tracker.SetStatus(0.85)
 
-	if tracker.Validity == nil {
-		t.Errorf("Expected Validity to be initialized, but it is nil")
-	} else {
-		if *tracker.Validity != 0.85 {
-			t.Errorf("Expected Validity to be 0.85, but got %f", *tracker.Validity)
-		}
-	}
+	require.NotNil(t, tracker.Validity)
+	require.Equal(t, float32(0.85), *tracker.Validity)
 }
 
 func TestTrackerSetAccelNilAccel(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetAccel(1.0, 2.0, 3.0)
 
-	if tracker.Accel == nil {
-		t.Errorf("Expected Accel to be initialized, but it is nil")
-	} else {
-		if tracker.Accel.X != 1.0 || tracker.Accel.Y != 2.0 || tracker.Accel.Z != 3.0 {
-			t.Errorf("Expected Accel to be (1.0, 2.0, 3.0), but got (%f, %f, %f)", tracker.Accel.X, tracker.Accel.Y, tracker.Accel.Z)
-		}
-	}
+	require.NotNil(t, tracker.Accel)
+	require.Equal(t, float32(1.0), tracker.Accel.X)
+	require.Equal(t, float32(2.0), tracker.Accel.Y)
+	require.Equal(t, float32(3.0), tracker.Accel.Z)
 }
 
 func TestTrackerSetAccelNonNilAccel(t *testing.T) {
@@ -138,26 +109,20 @@ func TestTrackerSetAccelNonNilAccel(t *testing.T) {
 	}
 	tracker.SetAccel(4.0, 5.0, 6.0)
 
-	if tracker.Accel == nil {
-		t.Errorf("Expected Accel to be initialized, but it is nil")
-	} else {
-		if tracker.Accel.X != 4.0 || tracker.Accel.Y != 5.0 || tracker.Accel.Z != 6.0 {
-			t.Errorf("Expected Accel to be (4.0, 5.0, 6.0), but got (%f, %f, %f)", tracker.Accel.X, tracker.Accel.Y, tracker.Accel.Z)
-		}
-	}
+	require.NotNil(t, tracker.Accel)
+	require.Equal(t, float32(4.0), tracker.Accel.X)
+	require.Equal(t, float32(5.0), tracker.Accel.Y)
+	require.Equal(t, float32(6.0), tracker.Accel.Z)
 }
 
 func TestTrackerSetTrgtPosNilTrgtPos(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetTrgtPos(1.0, 2.0, 3.0)
 
-	if tracker.TrgtPos == nil {
-		t.Errorf("Expected TrgtPos to be initialized, but it is nil")
-	} else {
-		if tracker.TrgtPos.X != 1.0 || tracker.TrgtPos.Y != 2.0 || tracker.TrgtPos.Z != 3.0 {
-			t.Errorf("Expected TrgtPos to be (1.0, 2.0, 3.0), but got (%f, %f, %f)", tracker.TrgtPos.X, tracker.TrgtPos.Y, tracker.TrgtPos.Z)
-		}
-	}
+	require.NotNil(t, tracker.TrgtPos)
+	require.Equal(t, float32(1.0), tracker.TrgtPos.X)
+	require.Equal(t, float32(2.0), tracker.TrgtPos.Y)
+	require.Equal(t, float32(3.0), tracker.TrgtPos.Z)
 }
 
 func TestTrackerSetTrgtPosNonNilTrgtPos(t *testing.T) {
@@ -166,26 +131,18 @@ func TestTrackerSetTrgtPosNonNilTrgtPos(t *testing.T) {
 	}
 	tracker.SetTrgtPos(4.0, 5.0, 6.0)
 
-	if tracker.TrgtPos == nil {
-		t.Errorf("Expected TrgtPos to be initialized, but it is nil")
-	} else {
-		if tracker.TrgtPos.X != 4.0 || tracker.TrgtPos.Y != 5.0 || tracker.TrgtPos.Z != 6.0 {
-			t.Errorf("Expected TrgtPos to be (4.0, 5.0, 6.0), but got (%f, %f, %f)", tracker.TrgtPos.X, tracker.TrgtPos.Y, tracker.TrgtPos.Z)
-		}
-	}
+	require.NotNil(t, tracker.TrgtPos)
+	require.Equal(t, float32(4.0), tracker.TrgtPos.X)
+	require.Equal(t, float32(5.0), tracker.TrgtPos.Y)
+	require.Equal(t, float32(6.0), tracker.TrgtPos.Z)
 }
 
 func TestTrackerSetTimestampNilTimestamp(t *testing.T) {
 	tracker := &psn.Tracker{}
 	tracker.SetTimestamp(1)
 
-	if tracker.Timestamp == nil {
-		t.Errorf("Expected Timestamp to be initialized, but it is nil")
-	} else {
-		if *tracker.Timestamp != 1 {
-			t.Errorf("Expected Timestamp to be 1, but got %d", *tracker.Timestamp)
-		}
-	}
+	require.NotNil(t, tracker.Timestamp)
+	require.Equal(t, uint64(1), *tracker.Timestamp)
 }
 
 func TestTrackerSetTimestampNonNilTimestamp(t *testing.T) {
@@ -195,11 +152,6 @@ func TestTrackerSetTimestampNonNilTimestamp(t *testing.T) {
 	*tracker.Timestamp = 5
 	tracker.SetTimestamp(8)
 
-	if tracker.Timestamp == nil {
-		t.Errorf("Expected Timestamp to be initialized, but it is nil")
-	} else {
-		if *tracker.Timestamp != 8 {
-			t.Errorf("Expected Timestamp to be 8, but got %d", *tracker.Timestamp)
-		}
-	}
+	require.NotNil(t, tracker.Timestamp)
+	require.Equal(t, uint64(8), *tracker.Timestamp)
 }

@@ -1,10 +1,10 @@
 package encoders
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestPacketHeaderChunkEncoding(t *testing.T) {
@@ -32,9 +32,7 @@ func TestPacketHeaderChunkEncoding(t *testing.T) {
 		t.Run(testCase.description, func(t *testing.T) {
 			actual := EncodePacketHeaderChunk(testCase.data.PacketTimestamp, testCase.data.VersionHigh, testCase.data.VersionLow, testCase.data.FrameId, testCase.data.FramePacketCount)
 
-			if !reflect.DeepEqual(actual, testCase.expected) {
-				t.Errorf("failed to encode chunk properly, expected: %v, actual: %v\n", testCase.expected, actual)
-			}
+			require.Equal(t, testCase.expected, actual)
 		})
 	}
 }

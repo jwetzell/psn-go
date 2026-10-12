@@ -1,10 +1,10 @@
 package decoders
 
 import (
-	"reflect"
 	"testing"
 
 	"github.com/jwetzell/psn-go/internal/chunks"
+	"github.com/stretchr/testify/require"
 )
 
 func TestGoodDataPacketChunkDecoding(t *testing.T) {
@@ -157,13 +157,8 @@ func TestGoodDataPacketChunkDecoding(t *testing.T) {
 		t.Run(testCase.description, func(t *testing.T) {
 			actual, err := DecodeDataPacketChunk(testCase.bytes)
 
-			if err != nil {
-				t.Errorf("failed to decode chunk properly, error: %v", err)
-			}
-
-			if !reflect.DeepEqual(actual, testCase.expected) {
-				t.Errorf("failed to decode chunk properly, expected: %+v, actual: %+v", testCase.expected, actual)
-			}
+			require.NoError(t, err)
+			require.Equal(t, testCase.expected, actual)
 		})
 	}
 }
